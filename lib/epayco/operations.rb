@@ -25,10 +25,9 @@ module Epayco
       def list params={}, api_key=nil
         name = self.name.split('::').last.downcase
         if name == "customers"
-          # url = "/payment/v1/customer/" + uid + "/"
+          url = "/payment/v1/customers/" + Epayco.apiKey + "/"
         end
-        puts apiKey
-        # Mango.request :get, url, api_key, params
+        Epayco.request :get, url, api_key, params
       end
 
     end

@@ -8,10 +8,6 @@ module Epayco
     #   resource_name = self.name.split('::').last.downcase
     #   id ? "/#{resource_name}/#{id}/" : "/#{resource_name}/"
     # end
-
-    def self.apiKey
-      puts self.apiKey
-    end
   end
 
   class Token < Resource

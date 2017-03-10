@@ -51,8 +51,6 @@ module Epayco
       :payload => payload
     }
 
-    puts options
-
     begin
       response = execute_request(options)
       return {} if response.code == 204 and method == :delete
