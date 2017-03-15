@@ -114,7 +114,8 @@ module Epayco
   def self.encrypt(str, key)
     cipher = OpenSSL::Cipher.new('AES-128-CBC')
     cipher.encrypt
-    iv = OpenSSL::Random.random_bytes(cipher.iv_len)
+    # iv = OpenSSL::Random.random_bytes(cipher.iv_len)
+    iv = "0000000000000000"
     cipher.iv = iv
     cipher.key = key
     str = iv + str
