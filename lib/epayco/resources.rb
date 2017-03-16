@@ -5,7 +5,11 @@ module Epayco
     include Operations
 
     def self.url id=nil
-      resource_name = self.name.split('::').last.downcase
+      self.name.split('::').last.downcase
+    end
+
+    def self.switch
+      self.url == "bank" || self.url == "cash" ? true : false
     end
   end
 
@@ -14,19 +18,23 @@ module Epayco
   end
 
   class Customers < Resource
-    public_class_method :create, :get, :list
+    public_class_method :create, :get, :list, :update
   end
 
   class Plan < Resource
-    public_class_method :create, :get, :list
+    public_class_method :create, :get, :list, :delete
   end
 
   class Subscriptions < Resource
-    public_class_method :create, :get, :list
+    public_class_method :create, :get, :list, :cancel
   end
 
   class Bank < Resource
-    public_class_method :create
+    public_class_method :create, :get
+  end
+
+  class Cash < Resource
+    public_class_method :create, :get
   end
 
 end

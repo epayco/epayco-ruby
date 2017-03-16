@@ -1,6 +1,5 @@
 require 'rest-client'
 require 'json'
-# require 'aes'
 require 'openssl'
 require 'base64'
 require 'open-uri'
@@ -31,10 +30,8 @@ module Epayco
      attr_accessor :apiKey, :privateKey, :lang, :test
   end
 
-  def self.request(method, url, apiKey=nil, params={}, headers={}, switch)
+  def self.request(method, url, extra=nil, params={}, headers={}, switch)
     method = method.to_sym
-
-    lang = Epayco.lang.upcase
 
     unless apiKey ||= @apiKey
       raise Error.new('100', lang)
@@ -48,9 +45,11 @@ module Epayco
     params = nil unless method == :get
 
     if switch
+      if method == :post || method == :patch
+        enc = encrypt_aes(payload)
+        payload = enc.to_json
+      end
       url = @api_base_secure + url
-      enc = encrypt_aes(payload)
-      payload = enc.to_json
     else
       url = @api_base + url
     end
@@ -114,7 +113,6 @@ module Epayco
   def self.encrypt(str, key)
     cipher = OpenSSL::Cipher.new('AES-128-CBC')
     cipher.encrypt
-    # iv = OpenSSL::Random.random_bytes(cipher.iv_len)
     iv = "0000000000000000"
     cipher.iv = iv
     cipher.key = key

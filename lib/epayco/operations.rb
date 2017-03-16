@@ -4,7 +4,7 @@ module Epayco
 
       private
 
-      def create params={}, api_key=nil
+      def create params={}, extra=nil
         if self.url == "token"
           url = "/v1/tokens"
         elsif self.url == "customers"
@@ -15,24 +15,41 @@ module Epayco
           url = "/recurring/v1/subscription/create"
         elsif self.url == "bank"
           url = "/restpagos/pagos/debitos.json"
+        elsif self.url == "cash"
+          if extra == "efecty"
+            url = "/restpagos/pagos/efecties.json"
+          elsif extra == "baloto"
+            url = "/restpagos/pagos/balotos.json"
+          elsif extra == "gana"
+            url = "/restpagos/pagos/ganas.json"
+          else
+            raise Error.new('109', Epayco.lang)
+          end
         end
-        switch = self.url == "bank" ? true : false
-        Epayco.request :post, url, api_key, params, switch
+        Epayco.request :post, url, extra, params, self.switch
       end
 
-      def get uid, params={}, api_key=nil
+      def get uid, params={}, extra=nil
         if self.url == "customers"
           url = "/payment/v1/customer/" + Epayco.apiKey + "/" + uid + "/"
         elsif self.url == "plan"
           url = "/recurring/v1/plan/" + Epayco.apiKey + "/" + uid + "/"
         elsif self.url == "subscriptions"
           url = "/recurring/v1/subscription/" + uid + "/" + Epayco.apiKey  + "/"
+        elsif self.url == "bank" || self.url == "cash"
+          url = "/restpagos/pse/transactioninfomation.json?transactionID=" + uid + "&&public_key=" + Epayco.apiKey
         end
-        switch = self.url == "bank" ? true : false
-        Epayco.request :get, url, api_key, params, switch
+        Epayco.request :get, url, extra, params, self.switch
       end
 
-      def list params={}, api_key=nil
+      def update uid, params={}, extra=nil
+        if self.url == "customers"
+          url = "/payment/v1/customer/edit/" + Epayco.apiKey + "/" + uid + "/"
+        end
+        Epayco.request :post, url, extra, params, self.switch
+      end
+
+      def list params={}, extra=nil
         if self.url == "customers"
           url = "/payment/v1/customers/" + Epayco.apiKey + "/"
         elsif self.url == "plan"
@@ -40,13 +57,23 @@ module Epayco
         elsif self.url == "subscriptions"
           url = "/recurring/v1/subscriptions/" + Epayco.apiKey
         end
-        Epayco.request :get, url, api_key, params
+        Epayco.request :get, url, extra, params, self.switch
       end
 
-      def remove
+      def delete uid, params={}, extra=nil
+        if self.url == "plan"
+          url = "/recurring/v1/plan/remove/" + Epayco.apiKey + "/" + uid + "/"
+        end
+        Epayco.request :post, url, extra, params, self.switch
       end
 
-      def cancel
+      def cancel uid, params={}, extra=nil
+        params["id"] = uid
+        params["public_key"] = Epayco.apiKey
+        if self.url == "subscriptions"
+          url = "/recurring/v1/subscription/cancel"
+        end
+        Epayco.request :post, url, extra, params, self.switch
       end
 
     end
