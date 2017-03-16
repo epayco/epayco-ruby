@@ -4,14 +4,18 @@ module Epayco
   class Resource
     include Operations
 
+    # Def url endpoint
     def self.url id=nil
       self.name.split('::').last.downcase
     end
 
+    # Case switch secure or api
     def self.switch
       self.url == "bank" || self.url == "cash" ? true : false
     end
   end
+
+  # Resources and CRUD
 
   class Token < Resource
     public_class_method :create

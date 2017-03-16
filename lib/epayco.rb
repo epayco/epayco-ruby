@@ -7,10 +7,12 @@ require_relative 'epayco/resources'
 
 module Epayco
 
+  # Set custom error
   class Error < StandardError
     include Enumerable
     attr_accessor :errors
 
+    # Get code, lang and show custom error
     def initialize code, lang
       file = open("https://s3-us-west-2.amazonaws.com/epayco/message_api/errors.json").read
       data_hash = JSON.parse(file)
@@ -23,15 +25,19 @@ module Epayco
     end
   end
 
+  # Endpoints
   @api_base = 'http://localhost:3000'
   @api_base_secure = 'https://secure.payco.co'
 
+  # Init sdk parameters
   class << self
      attr_accessor :apiKey, :privateKey, :lang, :test
   end
 
+  # Eject request and show response or error
   def self.request(method, url, extra=nil, params={}, headers={}, switch)
     method = method.to_sym
+
 
     unless apiKey ||= @apiKey
       raise Error.new('100', lang)
@@ -44,6 +50,7 @@ module Epayco
     payload = JSON.generate(params) if method == :post || method == :patch
     params = nil unless method == :get
 
+    # Switch secure or api
     if switch
       if method == :post || method == :patch
         enc = encrypt_aes(payload)
@@ -68,8 +75,7 @@ module Epayco
       :payload => payload
     }
 
-    @iv = "0000000000000000";
-
+    # Open library rest client
     begin
       response = execute_request(options)
       return {} if response.code == 204 and method == :delete
@@ -81,10 +87,12 @@ module Epayco
 
   private
 
+  # Get response successful
   def self.execute_request(options)
     RestClient::Request.execute(options)
   end
 
+  # Get response with errors
   def self.handle_errors exception
     body = JSON.parse exception.http_body
     raise Error.new(exception.to_s, body['errors'])
@@ -106,10 +114,6 @@ module Epayco
     return @seted
   end
 
-  def self.enc_value value, key
-    AES.encrypt(value, key, {:iv => key})
-  end
-
   def self.encrypt(str, key)
     cipher = OpenSSL::Cipher.new('AES-128-CBC')
     cipher.encrypt
@@ -121,6 +125,7 @@ module Epayco
     Base64.urlsafe_encode64(data)
   end
 
+  # Traslate secure petitions
   def self.lang_key key
     file = File.read('../utils/key_lang.json')
     data_hash = JSON.parse(file)

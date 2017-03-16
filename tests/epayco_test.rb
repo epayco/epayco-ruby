@@ -1,10 +1,29 @@
 require File.expand_path("../lib/epayco", File.dirname(__FILE__))
-require 'json'
+require File.expand_path("test_helper", File.dirname(__FILE__))
 
-Epayco.apiKey = '491d6a0b6e992cf924edd8d3d088aff1'
-Epayco.privateKey = '268c8e0162990cf2ce97fa7ade2eff5a'
-Epayco.lang = 'ES'
-Epayco.test = true
+require "cutest"
+require "mocha/api"
+include Mocha::API
+
+prepare do
+  Epayco.apiKey = '491d6a0b6e992cf924edd8d3d088aff1'
+  Epayco.privateKey = '268c8e0162990cf2ce97fa7ade2eff5a'
+  Epayco.lang = 'ES'
+  Epayco.test = true
+end
+
+setup do
+  Epayco.mock_rest_client = mock
+end
+
+test "create token" do |mock|
+    
+end
+
+# Epayco.apiKey = '491d6a0b6e992cf924edd8d3d088aff1'
+# Epayco.privateKey = '268c8e0162990cf2ce97fa7ade2eff5a'
+# Epayco.lang = 'ES'
+# Epayco.test = true
 
 
 # #TOKEN
@@ -208,9 +227,9 @@ Epayco.test = true
 #   puts e
 # end
 
-begin
-  cash = Epayco::Cash.get "257114"
-  puts cash
-rescue Epayco::Error => e
-  puts e
-end
+# begin
+#   cash = Epayco::Cash.get "257114"
+#   puts cash
+# rescue Epayco::Error => e
+#   puts e
+# end

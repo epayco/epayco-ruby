@@ -4,6 +4,7 @@ module Epayco
 
       private
 
+      # Action create
       def create params={}, extra=nil
         if self.url == "token"
           url = "/v1/tokens"
@@ -29,6 +30,7 @@ module Epayco
         Epayco.request :post, url, extra, params, self.switch
       end
 
+      # Action retrieve from id
       def get uid, params={}, extra=nil
         if self.url == "customers"
           url = "/payment/v1/customer/" + Epayco.apiKey + "/" + uid + "/"
@@ -42,6 +44,7 @@ module Epayco
         Epayco.request :get, url, extra, params, self.switch
       end
 
+      # Action update
       def update uid, params={}, extra=nil
         if self.url == "customers"
           url = "/payment/v1/customer/edit/" + Epayco.apiKey + "/" + uid + "/"
@@ -49,6 +52,7 @@ module Epayco
         Epayco.request :post, url, extra, params, self.switch
       end
 
+      # Action retrieve all documents from user
       def list params={}, extra=nil
         if self.url == "customers"
           url = "/payment/v1/customers/" + Epayco.apiKey + "/"
@@ -60,6 +64,7 @@ module Epayco
         Epayco.request :get, url, extra, params, self.switch
       end
 
+      # Remove data from api
       def delete uid, params={}, extra=nil
         if self.url == "plan"
           url = "/recurring/v1/plan/remove/" + Epayco.apiKey + "/" + uid + "/"
@@ -67,6 +72,7 @@ module Epayco
         Epayco.request :post, url, extra, params, self.switch
       end
 
+      # Cance subscription
       def cancel uid, params={}, extra=nil
         params["id"] = uid
         params["public_key"] = Epayco.apiKey
@@ -78,6 +84,7 @@ module Epayco
 
     end
 
+    # Export methods
     def self.included(base)
       base.extend(ClassMethods)
     end
