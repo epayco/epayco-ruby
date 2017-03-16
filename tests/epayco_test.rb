@@ -1,29 +1,29 @@
 require File.expand_path("../lib/epayco", File.dirname(__FILE__))
 require File.expand_path("test_helper", File.dirname(__FILE__))
 
-require "cutest"
-require "mocha/api"
-include Mocha::API
+# require "cutest"
+# require "mocha/api"
+# include Mocha::API
+#
+# prepare do
+#   Epayco.apiKey = '491d6a0b6e992cf924edd8d3d088aff1'
+#   Epayco.privateKey = '268c8e0162990cf2ce97fa7ade2eff5a'
+#   Epayco.lang = 'ES'
+#   Epayco.test = true
+# end
+#
+# setup do
+#   Epayco.mock_rest_client = mock
+# end
+#
+# test "create token" do |mock|
+#
+# end
 
-prepare do
-  Epayco.apiKey = '491d6a0b6e992cf924edd8d3d088aff1'
-  Epayco.privateKey = '268c8e0162990cf2ce97fa7ade2eff5a'
-  Epayco.lang = 'ES'
-  Epayco.test = true
-end
-
-setup do
-  Epayco.mock_rest_client = mock
-end
-
-test "create token" do |mock|
-    
-end
-
-# Epayco.apiKey = '491d6a0b6e992cf924edd8d3d088aff1'
-# Epayco.privateKey = '268c8e0162990cf2ce97fa7ade2eff5a'
-# Epayco.lang = 'ES'
-# Epayco.test = true
+Epayco.apiKey = '491d6a0b6e992cf924edd8d3d088aff1'
+Epayco.privateKey = '268c8e0162990cf2ce97fa7ade2eff5a'
+Epayco.lang = 'ES'
+Epayco.test = true
 
 
 # #TOKEN
@@ -230,6 +230,32 @@ end
 # begin
 #   cash = Epayco::Cash.get "257114"
 #   puts cash
+# rescue Epayco::Error => e
+#   puts e
+# end
+
+# params = {
+#   token_card: "NZdBoKPLaaNayfNNo",
+#   customer_id: "rsoBM9gmz8wL56kNg",
+#   plan_id: "coursereact",
+#   doc_type: "CC",
+#   doc_number: "1035851980",
+#   name: "John",
+#   last_name: "Doe",
+#   email: "example@email.com",
+#   ip: "192.198.2.114",
+#   bill: "OR-1234",
+#   description: "Test Payment",
+#   value: "116000",
+#   tax: "16000",
+#   tax_base: "100000",
+#   currency: "COP",
+#   dues: "12"
+# }
+#
+# begin
+#   pay = Epayco::Charge.create params
+#   puts pay
 # rescue Epayco::Error => e
 #   puts e
 # end

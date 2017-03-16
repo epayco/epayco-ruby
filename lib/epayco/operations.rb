@@ -26,6 +26,8 @@ module Epayco
           else
             raise Error.new('109', Epayco.lang)
           end
+        elsif self.url == "charge"
+          url = "/payment/v1/charge/create"
         end
         Epayco.request :post, url, extra, params, self.switch
       end

@@ -41,4 +41,8 @@ module Epayco
     public_class_method :create, :get
   end
 
+  class Charge < Resource
+    public_class_method :create, :get
+  end
+
 end
