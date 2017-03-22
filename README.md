@@ -31,15 +31,36 @@ Epayco.test = true
 
 ```
 credit_info = {
-  "card[number]" => "4575623182290326",
-  "card[exp_year]" => "2017",
-  "card[exp_month]" => "07",
-  "card[cvc]" => "123"
+  "card[number]": "4575623182290326",
+  "card[exp_year]": "2017",
+  "card[exp_month]": "07",
+  "card[cvc]": "123"
 }
 
 begin
   token = Epayco::Token.create credit_info
   assert(token)
+rescue Epayco::Error => e
+  puts e
+end
+```
+
+### Customers
+
+#### Create
+
+```
+customer_info = {
+  token_card: "eXj5Wdqgj7xzvC7AR",
+  name: "Joe Doe",
+  email: "joe@payco.co",
+  phone: "3005234321",
+  default: true
+}
+
+begin
+  customer = Epayco::Customers.create customer_info
+  assert(customer)
 rescue Epayco::Error => e
   puts e
 end
