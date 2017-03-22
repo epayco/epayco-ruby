@@ -65,3 +65,97 @@ rescue Epayco::Error => e
   puts e
 end
 ```
+
+#### Retrieve
+
+```
+begin
+  customer = Epayco::Customers.get "id_customer"
+  assert(customer)
+rescue Epayco::Error => e
+  puts e
+end
+```
+
+#### List
+
+```
+begin
+  customer = Epayco::Customers.list
+  assert(customer)
+rescue Epayco::Error => e
+  puts e
+end
+```
+
+#### Update
+
+```
+update_customer_info = {
+  name: "Alex"
+}
+
+begin
+  customer = Epayco::Customers.update "id_customer", update_customer_info
+  assert(customer)
+rescue Epayco::Error => e
+  puts e
+end
+```
+
+### Plans
+
+#### Create
+
+```
+plan_info = {
+  id_plan: "coursereact",
+  name: "Course react js",
+  description: "Course react and redux",
+  amount: 30000,
+  currency: "cop",
+  interval: "month",
+  interval_count: 1,
+  trial_days: 30
+}
+
+begin
+  plan = Epayco::Plan.create plan_info
+  assert(plan)
+rescue Epayco::Error => e
+  puts e
+end
+```
+
+#### Retrieve
+
+```
+begin
+  plan = Epayco::Plan.get "coursereact"
+  assert(plan)
+rescue Epayco::Error => e
+  puts e
+end
+```
+
+#### List
+
+```
+begin
+  plan = Epayco::Plan.list
+  assert(plan)
+rescue Epayco::Error => e
+  puts e
+end
+```
+
+#### Remove
+
+```
+begin
+  plan = Epayco::Plan.delete "coursereact"
+  assert(plan)
+rescue Epayco::Error => e
+  puts e
+end
+```
