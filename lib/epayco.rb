@@ -3,6 +3,7 @@ require 'json'
 require 'openssl'
 require 'base64'
 require 'open-uri'
+require 'socket'
 require_relative 'epayco/resources'
 
 module Epayco
@@ -38,12 +39,7 @@ module Epayco
   def self.request(method, url, extra=nil, params={}, headers={}, switch)
     method = method.to_sym
 
-
-    unless apiKey ||= @apiKey
-      raise Error.new('100', lang)
-    end
-
-    unless privateKey ||= @privateKey
+    if !apiKey || !privateKey || !lang || !test
       raise Error.new('100', lang)
     end
 
@@ -59,6 +55,10 @@ module Epayco
       url = @api_base_secure + url
     else
       url = @api_base + url
+      rb_hash = JSON.parse(payload);
+      rb_hash["test"] = test ? "TRUE" : "FALSE"
+      rb_hash["ip"] = local_ip
+      payload = rb_hash.to_json
     end
 
     headers = {
@@ -75,7 +75,7 @@ module Epayco
       :payload => payload
     }
 
-    # Open library rest client
+    #Open library rest client
     begin
       response = execute_request(options)
       return {} if response.code == 204 and method == :delete
@@ -98,6 +98,16 @@ module Epayco
     raise Error.new(exception.to_s, body['errors'])
   end
 
+  def self.local_ip
+      orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true
+      UDPSocket.open do |s|
+        s.connect '64.233.187.99', 1
+        s.addr.last
+      end
+      ensure
+        Socket.do_not_reverse_lookup = orig
+   end
+
   def self.encrypt_aes data
     sandbox = Epayco.test ? "TRUE" : "FALSE"
     @tags = JSON.parse(data)
@@ -110,6 +120,7 @@ module Epayco
     @seted["i"] = Base64.encode64("0000000000000000")
     @seted["enpruebas"] = encrypt(sandbox, Epayco.privateKey)
     @seted["lenguaje"] = "ruby"
+    @seted["ip"] = local_ip
     @seted["p"] = ""
     return @seted
   end

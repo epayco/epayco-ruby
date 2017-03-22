@@ -1,3 +1,5 @@
 .env
 /.gs
 epayco-*.gem
+
+tests/epayco_test.rb

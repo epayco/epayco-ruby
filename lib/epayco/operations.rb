@@ -84,6 +84,13 @@ module Epayco
         Epayco.request :post, url, extra, params, self.switch
       end
 
+      def charge params={}, extra=nil
+        if self.url == "subscriptions"
+          url = "/payment/v1/charge/subscription/create"
+        end
+        Epayco.request :post, url, extra, params, self.switch
+      end
+
     end
 
     # Export methods

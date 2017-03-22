@@ -30,7 +30,7 @@ module Epayco
   end
 
   class Subscriptions < Resource
-    public_class_method :create, :get, :list, :cancel
+    public_class_method :create, :get, :list, :cancel, :charge
   end
 
   class Bank < Resource
