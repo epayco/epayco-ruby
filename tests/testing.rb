@@ -179,7 +179,7 @@ test "create cash" do |mock|
   end
 end
 
-test "get cash" do |mock|
+test "retrieve cash" do |mock|
   begin
     cash = Epayco::Cash.get "123"
     assert(cash)
@@ -199,7 +199,7 @@ test "create payment" do |mock|
   end
 end
 
-test "get payment" do |mock|
+test "retrieve payment" do |mock|
   begin
     pay = Epayco::Charge.get "123"
     assert(pay)
