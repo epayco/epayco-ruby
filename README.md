@@ -18,7 +18,7 @@ $ gem install epayco-ruby
 
 ## Usage
 
-```
+```ruby
 require 'epayco-ruby'
 
 Epayco.apiKey = '491d6a0b6e992.......'
@@ -29,7 +29,7 @@ Epayco.test = true
 
 ### Create Token
 
-```
+```ruby
 credit_info = {
   "card[number]": "4575623182290326",
   "card[exp_year]": "2017",
@@ -48,7 +48,7 @@ end
 
 #### Create
 
-```
+```ruby
 customer_info = {
   token_card: "eXj5Wdqgj7xzvC7AR",
   name: "Joe Doe",
@@ -66,7 +66,7 @@ end
 
 #### Retrieve
 
-```
+```ruby
 begin
   customer = Epayco::Customers.get "id_customer"
 rescue Epayco::Error => e
@@ -76,7 +76,7 @@ end
 
 #### List
 
-```
+```ruby
 begin
   customer = Epayco::Customers.list
 rescue Epayco::Error => e
@@ -86,7 +86,7 @@ end
 
 #### Update
 
-```
+```ruby
 update_customer_info = {
   name: "Alex"
 }
@@ -102,7 +102,7 @@ end
 
 #### Create
 
-```
+```ruby
 plan_info = {
   id_plan: "coursereact",
   name: "Course react js",
@@ -123,7 +123,7 @@ end
 
 #### Retrieve
 
-```
+```ruby
 begin
   plan = Epayco::Plan.get "coursereact"
 rescue Epayco::Error => e
@@ -133,7 +133,7 @@ end
 
 #### List
 
-```
+```ruby
 begin
   plan = Epayco::Plan.list
 rescue Epayco::Error => e
@@ -143,7 +143,7 @@ end
 
 #### Remove
 
-```
+```ruby
 begin
   plan = Epayco::Plan.delete "coursereact"
 rescue Epayco::Error => e
@@ -155,7 +155,7 @@ end
 
 #### Create
 
-```
+```ruby
 subscription_info = {
   id_plan: "coursereact",
   customer: "A6ZGiJ6rgxK5RB2WT",
@@ -174,7 +174,7 @@ end
 
 #### Retrieve
 
-```
+```ruby
 begin
   sub = Epayco::Subscriptions.get "id_subscription"
 rescue Epayco::Error => e
@@ -184,7 +184,7 @@ end
 
 #### List
 
-```
+```ruby
 begin
   sub = Epayco::Subscriptions.list
 rescue Epayco::Error => e
@@ -194,7 +194,7 @@ end
 
 #### Cancel
 
-```
+```ruby
 begin
   sub = Epayco::Subscriptions.cancel "id_subscription"
 rescue Epayco::Error => e
@@ -204,7 +204,7 @@ end
 
 #### Pay Subscription
 
-```
+```ruby
 subscription_info = {
   id_plan: "coursereact",
   customer: "A6ZGiJ6rgxK5RB2WT",
@@ -224,7 +224,7 @@ end
 
 #### Create
 
-```
+```ruby
 pse_info = {
   bank: "1007",
   invoice: "1472050778",
@@ -256,7 +256,7 @@ end
 
 #### Retrieve
 
-```
+```ruby
 begin
   pse = Epayco::Bank.get "id_transaction"
 rescue Epayco::Error => e
@@ -268,7 +268,7 @@ end
 
 #### Create
 
-```
+```ruby
 cash_info = {
     invoice: "1472050778",
     description: "pay test",
@@ -299,7 +299,7 @@ end
 
 #### Retrieve
 
-```
+```ruby
 begin
   cash = Epayco::Cash.get "id_transaction"
 rescue Epayco::Error => e
@@ -311,7 +311,7 @@ end
 
 #### Create
 
-```
+```ruby
 payment_info = {
   token_card: "eXj5Wdqgj7xzvC7AR",
   customer_id: "A6ZGiJ6rgxK5RB2WT",
@@ -339,7 +339,7 @@ end
 
 #### Retrieve
 
-```
+```ruby
 begin
   pay = Epayco::Charge.get "id_payment"
 rescue Epayco::Error => e
