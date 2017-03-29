@@ -25,8 +25,7 @@ Gem::Specification.new do |s|
   }
 
   s.test_files = %w{
-    test/epayco_test.rb
-    test/test_helper.rb
+    tests/testing.rb
+    tests/test_helper.rb
   }
-
 end
