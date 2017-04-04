@@ -27,7 +27,8 @@ module Epayco
   end
 
   # Endpoints
-  @api_base = 'https://api.secure.payco.co'
+  # @api_base = 'https://api.secure.payco.co'
+  @api_base = 'http://localhost:3000'
   @api_base_secure = 'https://secure.payco.co'
 
   # Init sdk parameters
@@ -43,9 +44,6 @@ module Epayco
       raise Error.new('100', lang)
     end
 
-    payload = JSON.generate(params) if method == :post || method == :patch
-    params = nil unless method == :get
-
     # Switch secure or api
     if switch
       if method == :post || method == :patch
@@ -54,11 +52,13 @@ module Epayco
       end
       url = @api_base_secure + url
     else
+      if method == :post || method == :patch
+        rb_hash = JSON.parse(payload)
+        rb_hash["test"] = test ? "TRUE" : "FALSE"
+        rb_hash["ip"] = local_ip
+        payload = rb_hash.to_json
+      end
       url = @api_base + url
-      rb_hash = JSON.parse(payload);
-      rb_hash["test"] = test ? "TRUE" : "FALSE"
-      rb_hash["ip"] = local_ip
-      payload = rb_hash.to_json
     end
 
     headers = {
@@ -75,7 +75,7 @@ module Epayco
       :payload => payload
     }
 
-    #Open library rest client
+    # Open library rest client
     begin
       response = execute_request(options)
       return {} if response.code == 204 and method == :delete

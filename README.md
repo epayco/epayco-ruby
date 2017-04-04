@@ -21,8 +21,8 @@ $ gem install epayco-ruby
 ```ruby
 require 'epayco-ruby'
 
-Epayco.apiKey = '491d6a0b6e992.......'
-Epayco.privateKey = '268c8e0162990cf.......'
+Epayco.apiKey = 'YOU_PUBLIC_API_KEY'
+Epayco.privateKey = 'YOU_PRIVATE_API_KEY'
 Epayco.lang = 'ES'
 Epayco.test = true
 ```
@@ -31,10 +31,10 @@ Epayco.test = true
 
 ```ruby
 credit_info = {
-  "card[number]": "4575623182290326",
-  "card[exp_year]": "2017",
-  "card[exp_month]": "07",
-  "card[cvc]": "123"
+  "card[number]" => "4575623182290326",
+  "card[exp_year]" => "2017",
+  "card[exp_month]" => "07",
+  "card[cvc]" => "123"
 }
 
 begin
@@ -226,7 +226,7 @@ end
 
 ```ruby
 pse_info = {
-  bank: "1007",
+  bank: "1022",
   invoice: "1472050778",
   description: "pay test",
   value: "10000",
@@ -241,7 +241,6 @@ pse_info = {
   email: "no-responder@payco.co",
   country: "CO",
   cell_phone: "3010000001",
-  ip: "186.116.10.133",
   url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   method_confirmation: "GET",
@@ -284,7 +283,6 @@ cash_info = {
     email: "test@mailinator.com",
     cell_phone: "3010000001",
     end_date: "2017-12-05",
-    ip: "186.116.10.133",
     url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
     url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
     method_confirmation: "GET",
@@ -320,7 +318,6 @@ payment_info = {
   name: "John",
   last_name: "Doe",
   email: "example@email.com",
-  ip: "192.198.2.114",
   bill: "OR-1234",
   description: "Test Payment",
   value: "116000",
