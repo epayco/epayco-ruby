@@ -27,8 +27,7 @@ module Epayco
   end
 
   # Endpoints
-  # @api_base = 'https://api.secure.payco.co'
-  @api_base = 'http://localhost:3000'
+  @api_base = 'https://api.secure.payco.co'
   @api_base_secure = 'https://secure.payco.co'
 
   # Init sdk parameters
