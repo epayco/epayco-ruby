@@ -43,6 +43,9 @@ module Epayco
       raise Error.new('100', lang)
     end
 
+    payload = JSON.generate(params) if method == :post || method == :patch
+    params = nil unless method == :get
+
     # Switch secure or api
     if switch
       if method == :post || method == :patch
