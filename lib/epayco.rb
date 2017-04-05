@@ -122,7 +122,7 @@ module Epayco
     @seted["i"] = Base64.encode64("0000000000000000")
     @seted["enpruebas"] = encrypt(sandbox, Epayco.privateKey)
     @seted["lenguaje"] = "ruby"
-    @seted["ip"] = local_ip
+    @seted["ip"] = encrypt(local_ip, Epayco.privateKey)
     @seted["p"] = ""
     return @seted
   end
@@ -140,7 +140,7 @@ module Epayco
 
   # Traslate secure petitions
   def self.lang_key key
-    file = File.read('../utils/key_lang.json')
+    file = File.read(File.dirname(__FILE__) + '/keylang.json')
     data_hash = JSON.parse(file)
     data_hash[key]
   end

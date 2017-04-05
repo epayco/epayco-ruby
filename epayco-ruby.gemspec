@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name              = "epayco-ruby"
-  s.version           = "0.0.3"
+  s.version           = "0.0.4"
   s.summary           = "Ruby wrapper for Epayco API"
   s.description       = "API to interact with Epayco\nhttps://epayco.co"
   s.authors           = ["Epayco development team", "Jonathan Aguirre"]
@@ -13,12 +13,14 @@ Gem::Specification.new do |s|
   s.license           = "MIT"
   s.executables.push("epayco")
   s.add_dependency('rest-client', '~> 1.7')
+  s.add_dependency('json', '~> 2.0')
   s.add_development_dependency('cutest', '~> 1.2')
   s.add_development_dependency('mocha', '~> 1.1')
 
   s.files = %w{
     bin/epayco
     lib/epayco.rb
+    lib/keylang.json
     lib/epayco-ruby.rb
     lib/epayco/resources.rb
     lib/epayco/operations.rb
