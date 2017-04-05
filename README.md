@@ -1,10 +1,12 @@
-# Epayco
+Epayco
+=====
 
 Ruby wrapper for Epayco API
 
 ## Description
 
-API to interact with Epayco <https://epayco.co/docs/api/>
+API to interact with Epayco
+https://epayco.co/docs/api/
 
 ## Installation
 
@@ -158,8 +160,6 @@ subscription_info = {
   id_plan: "coursereact",
   customer: "A6ZGiJ6rgxK5RB2WT",
   token_card: "eXj5Wdqgj7xzvC7AR",
-  url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
-  url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   doc_type: "CC",
   doc_number: "5234567"
 }
@@ -209,6 +209,8 @@ subscription_info = {
   id_plan: "coursereact",
   customer: "A6ZGiJ6rgxK5RB2WT",
   token_card: "eXj5Wdqgj7xzvC7AR",
+  url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
+  url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   doc_type: "CC",
   doc_number: "5234567"
 }
