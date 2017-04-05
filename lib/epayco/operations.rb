@@ -41,8 +41,11 @@ module Epayco
           url = "/recurring/v1/plan/" + Epayco.apiKey + "/" + uid + "/"
         elsif self.url == "subscriptions"
           url = "/recurring/v1/subscription/" + uid + "/" + Epayco.apiKey  + "/"
-        elsif self.url == "bank" || self.url == "cash" || self.url == "charge"
-          url = "/restpagos/pse/transactioninfomation.json?transactionID=" + uid + "&&public_key=" + Epayco.apiKey
+        elsif self.url == "bank"
+          url = "/restpagos/pse/transactioninfomation.json?transactionID=" + uid + "&public_key=" + Epayco.apiKey
+          switch = true
+        elsif self.url == "cash" || self.url == "charge"
+          url = "/restpagos/transaction/response.json?ref_payco=" + uid + "&public_key=" + Epayco.apiKey
           switch = true
         end
         Epayco.request :get, url, extra, params, switch
