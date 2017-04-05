@@ -1,12 +1,10 @@
-Epayco
-=====
+# Epayco
 
 Ruby wrapper for Epayco API
 
 ## Description
 
-API to interact with Epayco
-https://epayco.co/docs/api/
+API to interact with Epayco <https://epayco.co/docs/api/>
 
 ## Installation
 
@@ -160,6 +158,8 @@ subscription_info = {
   id_plan: "coursereact",
   customer: "A6ZGiJ6rgxK5RB2WT",
   token_card: "eXj5Wdqgj7xzvC7AR",
+  url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
+  url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   doc_type: "CC",
   doc_number: "5234567"
 }
@@ -257,7 +257,7 @@ end
 
 ```ruby
 begin
-  pse = Epayco::Bank.get "id_transaction"
+  pse = Epayco::Bank.get "transactionID"
 rescue Epayco::Error => e
   puts e
 end
@@ -299,7 +299,7 @@ end
 
 ```ruby
 begin
-  cash = Epayco::Cash.get "id_transaction"
+  cash = Epayco::Cash.get "transactionID"
 rescue Epayco::Error => e
   puts e
 end
@@ -323,6 +323,8 @@ payment_info = {
   value: "116000",
   tax: "16000",
   tax_base: "100000",
+  url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
+  url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   currency: "COP",
   dues: "12"
 }
@@ -338,7 +340,7 @@ end
 
 ```ruby
 begin
-  pay = Epayco::Charge.get "id_payment"
+  pay = Epayco::Charge.get "transactionID"
 rescue Epayco::Error => e
   puts e
 end
