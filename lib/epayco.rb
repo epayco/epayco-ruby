@@ -39,7 +39,7 @@ module Epayco
   def self.request(method, url, extra=nil, params={}, headers={}, switch)
     method = method.to_sym
 
-    if !apiKey || !privateKey || !lang || !test
+    if !apiKey || !privateKey || !lang
       raise Error.new('100', lang)
     end
 
