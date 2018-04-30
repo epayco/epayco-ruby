@@ -12,8 +12,8 @@ Gem::Specification.new do |s|
 
   s.license           = "MIT"
   s.executables.push("epayco")
-  s.add_dependency('rest-client', '~> 1.7')
-  s.add_dependency('json', '~> 2.0')
+  s.add_dependency('rest-client', '~> 2.0')
+  s.add_dependency('json', '~> 2.1')
   s.add_development_dependency('cutest', '~> 1.2')
   s.add_development_dependency('mocha', '~> 1.1')
 
