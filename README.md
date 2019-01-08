@@ -266,7 +266,7 @@ end
 ```
 
 
-###Split Payments
+### Split Payments
 
 Previous requirements: https://docs.epayco.co/tools/split-payment
 
@@ -329,7 +329,7 @@ rescue Epayco::Error => e
 end
 ```
 
-###Split Payments
+### Split Payments
 
 Previous requirements: https://docs.epayco.co/tools/split-payment
 
@@ -391,7 +391,7 @@ rescue Epayco::Error => e
   puts e
 end
 ```
-###Split Payments
+### Split Payments
 
 Previous requirements: https://docs.epayco.co/tools/split-payment
 
