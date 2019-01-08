@@ -68,7 +68,7 @@ module Epayco
       :content_type => 'application/json',
       :type => 'sdk'
     }.merge(headers)
-
+    headers.delete :params unless method == :get
     options = {
       :headers => headers,
       :user => apiKey,

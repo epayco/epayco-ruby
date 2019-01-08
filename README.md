@@ -265,6 +265,28 @@ rescue Epayco::Error => e
 end
 ```
 
+
+###Split Payments
+
+Previous requirements: https://docs.epayco.co/tools/split-payment
+
+```ruby
+split_pse_info = {
+  #Other customary parameters...
+  splitpayment:"true",
+  split_app_id:"P_CUST_ID_CLIENTE APPLICATION",
+  split_merchant_id:"P_CUST_ID_CLIENTE COMMERCE",
+  split_type: "02",
+  split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
+  split_primary_receiver_fee: "10"
+}
+begin
+  pse = Epayco::Bank.create split_pse_info
+rescue Epayco::Error => e
+  puts e
+end
+```
+
 ### Cash
 
 #### Create
@@ -307,6 +329,28 @@ rescue Epayco::Error => e
 end
 ```
 
+###Split Payments
+
+Previous requirements: https://docs.epayco.co/tools/split-payment
+
+```ruby
+split_cash_info = {
+  #Other customary parameters...
+  splitpayment:"true",
+  split_app_id:"P_CUST_ID_CLIENTE APPLICATION",
+  split_merchant_id:"P_CUST_ID_CLIENTE COMMERCE",
+  split_type: "02",
+  split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
+  split_primary_receiver_fee: "10"
+}
+begin
+  cash = Epayco::Cash.create split_cash_info, "efecty"
+rescue Epayco::Error => e
+  puts e
+end
+```
+
+
 ### Payment
 
 #### Create
@@ -343,6 +387,26 @@ end
 ```ruby
 begin
   pay = Epayco::Charge.get "transactionID"
+rescue Epayco::Error => e
+  puts e
+end
+```
+###Split Payments
+
+Previous requirements: https://docs.epayco.co/tools/split-payment
+
+```ruby
+split_payment_info = {
+  #Other customary parameters...
+  splitpayment:"true",
+  split_app_id:"P_CUST_ID_CLIENTE APPLICATION",
+  split_merchant_id:"P_CUST_ID_CLIENTE COMMERCE",
+  split_type: "02",
+  split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
+  split_primary_receiver_fee: "10"
+}
+begin
+  pay = Epayco::Charge.create split_payment_info
 rescue Epayco::Error => e
   puts e
 end
