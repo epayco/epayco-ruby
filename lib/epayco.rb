@@ -13,6 +13,8 @@ module Epayco
     include Enumerable
     attr_accessor :errors
 
+    DEFAULT_TIMEOUT = 15
+
     # Get code, lang and show custom error
     def initialize code, lang
       file = open("https://s3-us-west-2.amazonaws.com/epayco/message_api/errors.json").read
@@ -32,7 +34,7 @@ module Epayco
 
   # Init sdk parameters
   class << self
-     attr_accessor :apiKey, :privateKey, :lang, :test
+    attr_accessor :apiKey, :privateKey, :lang, :test, :timeout
   end
 
   # Eject request and show response or error
@@ -70,11 +72,12 @@ module Epayco
     }.merge(headers)
     headers.delete :params unless method == :get
     options = {
-      :headers => headers,
-      :user => apiKey,
-      :method => method,
-      :url => url,
-      :payload => payload
+      headers: headers,
+      user: apiKey,
+      method: method,
+      url: url,
+      payload: payload,
+      timeout: timeout.presence || DEFAULT_TIMEOUT
     }
 
     # Open library rest client
@@ -144,5 +147,4 @@ module Epayco
     data_hash = JSON.parse(file)
     data_hash[key]
   end
-
 end
