@@ -135,7 +135,11 @@ module Epayco
     cipher.encrypt
     iv = "0000000000000000"
     cipher.iv = iv
-    cipher.key = key
+    # For now we must slice the 16 bits manually, hopefully in the near future
+    # Epayco will support 32 bits encryption using another cipher, this encryption
+    # is used by both bank and cash payments
+    # cipher.key = key
+    cipher.key = key.byteslice(0, cipher.key_len)
     str = iv + str
     data = cipher.update(str) + cipher.final
     Base64.urlsafe_encode64(data)
