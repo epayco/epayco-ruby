@@ -13,7 +13,7 @@ module Epayco
     include Enumerable
     attr_accessor :errors
 
-    DEFAULT_TIMEOUT = 15
+    DEFAULT_TIMEOUT = 60
 
     # Get code, lang and show custom error
     def initialize code, lang
