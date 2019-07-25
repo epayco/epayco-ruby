@@ -51,7 +51,8 @@ end
 ```ruby
 customer_info = {
   token_card: "eXj5Wdqgj7xzvC7AR",
-  name: "Joe Doe",
+  name: "Joe",
+  last_name: "Doe", #This parameter is optional
   email: "joe@payco.co",
   phone: "3005234321",
   default: true
