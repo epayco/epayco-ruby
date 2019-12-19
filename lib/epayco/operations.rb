@@ -79,6 +79,13 @@ module Epayco
         Epayco.request :post, url, extra, params, self.switch
       end
 
+      def delete params={}, extra=nil
+        if self.url == "customers"
+          url = "/v1/remove/token" 
+        end
+        Epayco.request :post, url, extra, params, self.switch
+      end
+
       # Cance subscription
       def cancel uid, params={}, extra=nil
         params["id"] = uid

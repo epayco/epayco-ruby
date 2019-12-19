@@ -22,7 +22,7 @@ module Epayco
   end
 
   class Customers < Resource
-    public_class_method :create, :get, :list, :update
+    public_class_method :create, :get, :list, :update, :delete
   end
 
   class Plan < Resource

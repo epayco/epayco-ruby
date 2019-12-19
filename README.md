@@ -99,6 +99,23 @@ rescue Epayco::Error => e
 end
 ```
 
+#### Delete Customers'token
+
+```ruby
+delete_customer_info = {
+  franchise: "visa",
+  mask: "457562******0326",
+  customer_id: "id_customer"
+
+}
+
+begin
+  customer = Epayco::Customers.delete delete_customer_info
+rescue Epayco::Error => e
+  puts e
+end
+```
+
 ### Plans
 
 #### Create
