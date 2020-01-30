@@ -230,7 +230,8 @@ subscription_info = {
   url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   doc_type: "CC",
-  doc_number: "5234567"
+  doc_number: "5234567",
+  id: "190.000.000.000"  #This is the client's IP, it is required
 }
 
 begin
@@ -264,6 +265,7 @@ pse_info = {
   url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   method_confirmation: "GET",
+  id: "190.000.000.000"  #This is the client's IP, it is required
 }
 
 begin
@@ -328,6 +330,7 @@ cash_info = {
     url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
     url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
     method_confirmation: "GET",
+    id: "190.000.000.000"  #This is the client's IP, it is required
 }
 
 begin
@@ -390,7 +393,8 @@ payment_info = {
   url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   currency: "COP",
-  dues: "12"
+  dues: "12",
+  id: "190.000.000.000"  #This is the client's IP, it is required
 }
 
 begin

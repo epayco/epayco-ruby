@@ -36,7 +36,7 @@ module Epayco
   end
 
   # Eject request and show response or error
-  def self.request(method, url, extra=nil, params={}, headers={}, switch)
+  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata)
     method = method.to_sym
 
     if !apiKey || !privateKey || !lang
@@ -49,8 +49,13 @@ module Epayco
     # Switch secure or api
     if switch
       if method == :post || method == :patch
-        enc = encrypt_aes(payload)
+        if cashdata
+        enc = encrypt_aes(payload, true)
         payload = enc.to_json
+        else
+        enc = encrypt_aes(payload, false)
+        payload = enc.to_json
+        end
       end
       url = @api_base_secure + url
     else
@@ -68,7 +73,7 @@ module Epayco
       :content_type => 'application/json',
       :type => 'sdk'
     }.merge(headers)
-    headers.delete :params unless method == :get
+
     options = {
       :headers => headers,
       :user => apiKey,
@@ -79,6 +84,8 @@ module Epayco
 
     # Open library rest client
     begin
+      #puts options
+      #abort("Message goes here 1")
       response = execute_request(options)
       return {} if response.code == 204 and method == :delete
       JSON.parse(response.body, :symbolize_names => true)
@@ -110,19 +117,33 @@ module Epayco
         Socket.do_not_reverse_lookup = orig
    end
 
-  def self.encrypt_aes data
+  def self.encrypt_aes(data, cashdata)
+   
     sandbox = Epayco.test ? "TRUE" : "FALSE"
     @tags = JSON.parse(data)
     @seted = {}
+    if cashdata
+      @tags.each {
+        |key, value|
+        @seted[lang_key(key)] = value
+      }
+      @seted["ip"] = local_ip
+      @seted["enpruebas"] = encrypt(sandbox, Epayco.privateKey)
+    else
     @tags.each {
       |key, value|
       @seted[lang_key(key)] = encrypt(value, Epayco.privateKey)
     }
+    @seted["ip"] = encrypt(local_ip, Epayco.privateKey)
+    @seted["enpruebas"] = encrypt(sandbox, Epayco.privateKey)
+    end
+
+    
+    
+    
     @seted["public_key"] = Epayco.apiKey
     @seted["i"] = Base64.encode64("0000000000000000")
-    @seted["enpruebas"] = encrypt(sandbox, Epayco.privateKey)
     @seted["lenguaje"] = "ruby"
-    @seted["ip"] = encrypt(local_ip, Epayco.privateKey)
     @seted["p"] = ""
     return @seted
   end
@@ -132,7 +153,7 @@ module Epayco
     cipher.encrypt
     iv = "0000000000000000"
     cipher.iv = iv
-    cipher.key = key
+    cipher.key = key.byteslice(0, cipher.key_len)
     str = iv + str
     data = cipher.update(str) + cipher.final
     Base64.urlsafe_encode64(data)

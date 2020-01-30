@@ -18,18 +18,27 @@ module Epayco
           url = "/restpagos/pagos/debitos.json"
         elsif self.url == "cash"
           if extra == "efecty"
-            url = "/restpagos/pagos/efecties.json"
+            url = "/restpagos/v2/efectivo/efecty"
+            cashdata = true
           elsif extra == "baloto"
-            url = "/restpagos/pagos/balotos.json"
+            url = "/restpagos/v2/efectivo/baloto"
+            cashdata = true
           elsif extra == "gana"
-            url = "/restpagos/pagos/ganas.json"
+            url = "/restpagos/v2/efectivo/gana"
+            cashdata = true
+          elsif extra == "redservi"
+            url = "/restpagos/v2/efectivo/redservi"
+            cashdata = true
+          elsif extra == "puntored"
+            url = "/restpagos/v2/efectivo/puntored"
+            cashdata = true
           else
             raise Error.new('109', Epayco.lang)
           end
         elsif self.url == "charge"
           url = "/payment/v1/charge/create"
         end
-        Epayco.request :post, url, extra, params, self.switch
+        Epayco.request :post, url, extra, params, self.switch, cashdata
       end
 
       # Action retrieve from id
@@ -48,7 +57,7 @@ module Epayco
           url = "/restpagos/transaction/response.json?ref_payco=" + uid + "&public_key=" + Epayco.apiKey
           switch = true
         end
-        Epayco.request :get, url, extra, params, switch
+        Epayco.request :get, url, extra, params, switch, cashdata
       end
 
       # Action update
@@ -56,7 +65,7 @@ module Epayco
         if self.url == "customers"
           url = "/payment/v1/customer/edit/" + Epayco.apiKey + "/" + uid + "/"
         end
-        Epayco.request :post, url, extra, params, self.switch
+        Epayco.request :post, url, extra, params, self.switch, cashdata
       end
 
       # Action retrieve all documents from user
@@ -68,7 +77,7 @@ module Epayco
         elsif self.url == "subscriptions"
           url = "/recurring/v1/subscriptions/" + Epayco.apiKey
         end
-        Epayco.request :get, url, extra, params, self.switch
+        Epayco.request :get, url, extra, params, self.switch, cashdata
       end
 
       # Remove data from api
@@ -76,14 +85,7 @@ module Epayco
         if self.url == "plan"
           url = "/recurring/v1/plan/remove/" + Epayco.apiKey + "/" + uid + "/"
         end
-        Epayco.request :post, url, extra, params, self.switch
-      end
-
-      def delete params={}, extra=nil
-        if self.url == "customers"
-          url = "/v1/remove/token" 
-        end
-        Epayco.request :post, url, extra, params, self.switch
+        Epayco.request :post, url, extra, params, self.switch, cashdata
       end
 
       # Cance subscription
@@ -93,14 +95,14 @@ module Epayco
         if self.url == "subscriptions"
           url = "/recurring/v1/subscription/cancel"
         end
-        Epayco.request :post, url, extra, params, self.switch
+        Epayco.request :post, url, extra, params, self.switch, cashdata
       end
 
       def charge params={}, extra=nil
         if self.url == "subscriptions"
           url = "/payment/v1/charge/subscription/create"
         end
-        Epayco.request :post, url, extra, params, self.switch
+        Epayco.request :post, url, extra, params, self.switch, cashdata
       end
 
     end
