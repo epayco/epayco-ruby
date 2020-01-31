@@ -179,7 +179,10 @@ subscription_info = {
   customer: "A6ZGiJ6rgxK5RB2WT",
   token_card: "eXj5Wdqgj7xzvC7AR",
   doc_type: "CC",
-  doc_number: "5234567"
+  doc_number: "5234567",
+  #Optional parameter: if these parameter it's not send, system get ePayco dashboard's url_confirmation
+  url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
+  method_confirmation: "POST"
 }
 
 begin
