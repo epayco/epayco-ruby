@@ -36,7 +36,7 @@ module Epayco
   end
 
   # Eject request and show response or error
-  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata)
+  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, sp)
     method = method.to_sym
 
     if !apiKey || !privateKey || !lang
@@ -68,20 +68,34 @@ module Epayco
       url = @api_base + url
     end
 
-    headers = {
-      :params => params,
-      :content_type => 'application/json',
-      :type => 'sdk'
-    }.merge(headers)
+    if sp
+       headers = {
+      :content_type => 'multipart/form-data'
+     }.merge(headers)
 
-    options = {
+      options = {
       :headers => headers,
       :user => apiKey,
       :method => method,
       :url => url,
       :payload => payload
-    }
+     }
+    else
+      headers = {
+      :params => params,
+      :content_type => 'application/json',
+      :type => 'sdk'
+     }.merge(headers)
 
+      options = {
+      :headers => headers,
+      :user => apiKey,
+      :method => method,
+      :url => url,
+      :payload => payload
+     }
+
+    end
     # Open library rest client
     begin
       #puts options

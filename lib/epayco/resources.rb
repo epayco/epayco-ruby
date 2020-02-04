@@ -13,6 +13,8 @@ module Epayco
     def self.switch
       self.url == "bank" || self.url == "cash" ? true : false
     end
+
+
   end
 
   # Resources and CRUD
@@ -22,7 +24,7 @@ module Epayco
   end
 
   class Customers < Resource
-    public_class_method :create, :get, :list, :update, :delete
+    public_class_method :create, :get, :list, :update
   end
 
   class Plan < Resource
@@ -43,6 +45,10 @@ module Epayco
 
   class Charge < Resource
     public_class_method :create, :get
+  end
+
+  class Safetypay < Resource
+    public_class_method :create
   end
 
 end

@@ -341,7 +341,18 @@ begin
 rescue Epayco::Error => e
   puts e
 end
+
 ```
+#### List
+
+```ruby
+ cash = Epayco::Cash.create cash_info, "efecty"
+ cash = Epayco::Cash.create cash_info, "gana"
+ cash = Epayco::Cash.create cash_info, "baloto"#//expiration date can not be longer than 30 days
+ cash = Epayco::Cash.create cash_info, "redservi"#//expiration date can not be longer than 30 days
+ cash = Epayco::Cash.create cash_info, "puntored"#//expiration date can not be longer than 30 days
+```
+
 
 #### Retrieve
 
@@ -432,6 +443,34 @@ payment_info = {
 }
 begin
   split_payment_info = Epayco::Charge.create payment_info
+rescue Epayco::Error => e
+  puts e
+end
+```
+
+
+### Safetypay
+
+#### Create
+
+```ruby
+safetypay_info = {
+  invoice: "1472050778",
+  description: "pay test",
+  value: "10000",
+  tax: "0",
+  tax_base: "0",
+  currency: "COP",
+  name: "testing",
+  last_name: "PAYCO",
+  email: "no-responder@payco.co",
+  url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
+  url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
+  method_confirmation: "GET"
+}
+
+begin
+  safetypay = Epayco::Safetypay.create safetypay_info
 rescue Epayco::Error => e
   puts e
 end
