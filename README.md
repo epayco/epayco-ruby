@@ -268,7 +268,15 @@ pse_info = {
   url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   method_confirmation: "GET",
-  id: "190.000.000.000"  #This is the client's IP, it is required
+  id: "190.000.000.000",  #This is the client's IP, it is required
+  #Extra params: These params are optional and can be used by the commerce
+  extra1: "",
+  extra2: "",
+  extra3: "",
+  extra4: "",
+  extra5: "",
+  extra6: "",
+  extra7: ""
 }
 
 begin
@@ -333,7 +341,14 @@ cash_info = {
     url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
     url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
     method_confirmation: "GET",
-    id: "190.000.000.000"  #This is the client's IP, it is required
+    id: "190.000.000.000",  #This is the client's IP, it is required
+    extra1: "",
+    extra2: "",
+    extra3: "",
+    extra4: "",
+    extra5: "",
+    extra6: "",
+    extra7: ""
 }
 
 begin
@@ -408,7 +423,16 @@ payment_info = {
   url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   currency: "COP",
   dues: "12",
-  id: "190.000.000.000"  #This is the client's IP, it is required
+  id: "190.000.000.000",  #This is the client's IP, it is required
+  use_default_card_customer: true, # if the user wants to be charged with the card that the customer currently has as default = true
+
+  extra1: "",
+  extra2: "",
+  extra3: "",
+  extra4: "",
+  extra5: "",
+  extra6: "",
+  extra7: ""
 }
 
 begin
