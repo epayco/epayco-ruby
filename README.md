@@ -110,11 +110,31 @@ delete_customer_info = {
 }
 
 begin
-  customer = Epayco::Customers.delete delete_customer_info
+  customer = Epayco::Customers.delatetetoken delete_customer_info
 rescue Epayco::Error => e
   puts e
 end
 ```
+
+#### Add new token default to card existed
+
+```ruby
+ customer_info = {
+   customer_id: "id_client",
+   token: "**********Q2ZLD9",
+   franchise: "visa",
+   mask: "457562******0326"
+ }
+ begin
+   customer = Epayco::Customers.updatetoken customer_info
+   puts customer
+ rescue Epayco::Error => e
+   puts e
+ end
+```
+
+
+
 
 ### Plans
 
@@ -471,5 +491,3 @@ rescue Epayco::Error => e
   puts e
 end
 ```
-
-

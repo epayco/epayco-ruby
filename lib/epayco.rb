@@ -36,7 +36,7 @@ module Epayco
   end
 
   # Eject request and show response or error
-  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, sp)
+  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, sp,  dt)
     method = method.to_sym
 
     if !apiKey || !privateKey || !lang
@@ -61,9 +61,13 @@ module Epayco
     else
       if method == :post || method == :patch
         rb_hash = JSON.parse(payload)
-        rb_hash["test"] = test ? "TRUE" : "FALSE"
-        rb_hash["ip"] = local_ip
-        payload = rb_hash.to_json
+        if dt
+          payload = rb_hash.to_json
+        else
+          rb_hash["test"] = test ? "TRUE" : "FALSE"
+          rb_hash["ip"] = local_ip
+          payload = rb_hash.to_json
+        end
       end
       url = @api_base + url
     end

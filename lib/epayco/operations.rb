@@ -6,6 +6,7 @@ module Epayco
 
       # Action create
       def create params={}, extra=nil
+        dt=false
         if self.url == "token"
           url = "/v1/tokens"
         elsif self.url == "customers"
@@ -42,12 +43,15 @@ module Epayco
         elsif self.url == "charge"
           url = "/payment/v1/charge/create"
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, sp
+        Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
       end
 
       # Action retrieve from id
       def get uid, params={}, extra=nil
         switch = self.switch;
+        cashdata=false
+        sp=false
+        dt=false
         if self.url == "customers"
           url = "/payment/v1/customer/" + Epayco.apiKey + "/" + uid + "/"
         elsif self.url == "plan"
@@ -61,19 +65,46 @@ module Epayco
           url = "/restpagos/transaction/response.json?ref_payco=" + uid + "&public_key=" + Epayco.apiKey
           switch = true
         end
-        Epayco.request :get, url, extra, params, switch, cashdata, sp
+        Epayco.request :get, url, extra, params, switch, cashdata, sp, dt
       end
 
       # Action update
       def update uid, params={}, extra=nil
+        cashdata=false
+        sp=false
+        dt=false
         if self.url == "customers"
           url = "/payment/v1/customer/edit/" + Epayco.apiKey + "/" + uid + "/"
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, sp
+        Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
+      end
+
+          # Action update token
+      def updatetoken params={}, extra=nil
+        if self.url == "customers"
+          url = "/payment/v1/customer/reasign/card/default"
+          cashdata = false
+          sp = false
+          dt = true
+        end
+        Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
+      end
+
+      def delatetetoken params={}, extra=nil
+        if self.url == "customers"
+          url = "/v1/remove/token"
+          cashdata = false
+          sp = false
+          dt = true
+        end
+        Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
       end
 
       # Action retrieve all documents from user
       def list params={}, extra=nil
+        cashdata=false
+        sp=false
+        dt=false
         if self.url == "customers"
           url = "/payment/v1/customers/" + Epayco.apiKey + "/"
         elsif self.url == "plan"
@@ -81,32 +112,41 @@ module Epayco
         elsif self.url == "subscriptions"
           url = "/recurring/v1/subscriptions/" + Epayco.apiKey
         end
-        Epayco.request :get, url, extra, params, self.switch, cashdata, sp
+        Epayco.request :get, url, extra, params, self.switch, cashdata, sp, dt
       end
 
       # Remove data from api
       def delete uid, params={}, extra=nil
+        cashdata=false
+        sp=false
+        dt=false
         if self.url == "plan"
           url = "/recurring/v1/plan/remove/" + Epayco.apiKey + "/" + uid + "/"
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, sp
+        Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
       end
 
       # Cance subscription
       def cancel uid, params={}, extra=nil
+        cashdata=false
+        sp=false
+        dt=false
         params["id"] = uid
         params["public_key"] = Epayco.apiKey
         if self.url == "subscriptions"
           url = "/recurring/v1/subscription/cancel"
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, sp
+        Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
       end
 
       def charge params={}, extra=nil
+        cashdata=false
+        sp=false
+        dt=false
         if self.url == "subscriptions"
           url = "/payment/v1/charge/subscription/create"
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, sp
+        Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
       end
 
     end
