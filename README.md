@@ -358,10 +358,11 @@ cash_info = {
     email: "test@mailinator.com",
     cell_phone: "3010000001",
     end_date: "2017-12-05",
+    id: "190.000.000.000",  #This is the client's IP, it is required
     url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
     url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
     method_confirmation: "GET",
-    id: "190.000.000.000",  #This is the client's IP, it is required
+    #Extra params: These params are optional and can be used by the commerce
     extra1: "",
     extra2: "",
     extra3: "",
@@ -439,13 +440,13 @@ payment_info = {
   value: "116000",
   tax: "16000",
   tax_base: "100000",
+  id: "190.000.000.000",  #This is the client's IP, it is required
   url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
+  use_default_card_customer: true, # if the user wants to be charged with the card that the customer currently has as default = true
   currency: "COP",
   dues: "12",
-  id: "190.000.000.000",  #This is the client's IP, it is required
-  use_default_card_customer: true, # if the user wants to be charged with the card that the customer currently has as default = true
-
+  #Extra params: These params are optional and can be used by the commerce
   extra1: "",
   extra2: "",
   extra3: "",
@@ -491,5 +492,3 @@ rescue Epayco::Error => e
   puts e
 end
 ```
-
-
