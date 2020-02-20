@@ -285,10 +285,10 @@ pse_info = {
   email: "no-responder@payco.co",
   country: "CO",
   cell_phone: "3010000001",
+  id: "190.000.000.000",  #client's IP, it is required
   url_response: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   url_confirmation: "https:/secure.payco.co/restpagos/testRest/endpagopse.php",
   method_confirmation: "GET",
-  id: "190.000.000.000",  #This is the client's IP, it is required
   #Extra params: These params are optional and can be used by the commerce
   extra1: "",
   extra2: "",
@@ -491,3 +491,5 @@ rescue Epayco::Error => e
   puts e
 end
 ```
+
+
