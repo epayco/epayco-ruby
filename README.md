@@ -13,7 +13,8 @@ https://epayco.co/docs/api/
 As usual, you can install it using rubygems.
 
 ```
-$ gem install epayco-ruby
+$ gem install epayco-sdk-ruby
+
 ```
 
 ## Usage
@@ -492,3 +493,5 @@ rescue Epayco::Error => e
   puts e
 end
 ```
+
+
