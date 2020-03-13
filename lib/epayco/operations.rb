@@ -99,6 +99,16 @@ module Epayco
         end
         Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
       end
+      
+      def addtoken params={}, extra=nil
+        if self.url == "customers"
+          url = "/v1/customer/add/token"
+          cashdata = false
+          sp = false
+          dt = true
+        end
+        Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
+      end
 
       # Action retrieve all documents from user
       def list params={}, extra=nil

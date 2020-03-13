@@ -135,6 +135,20 @@ end
 ```
 
 
+#### Add new token to customer existed
+
+```ruby
+ customer_info = {
+   token_card: "sHBxXAzfGPGa3J9b6",
+   customer_id: "id_client"
+ }
+ begin
+   customer = Epayco::Customers.addtoken customer_info
+   puts customer
+ rescue Epayco::Error => e
+   puts e
+ end
+```
 
 
 ### Plans

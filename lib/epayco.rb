@@ -39,6 +39,9 @@ module Epayco
   def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, sp,  dt)
     method = method.to_sym
 
+    auth = authent(apiKey ,privateKey)
+    bearer_token = 'Bearer '+ auth[:bearer_token]
+
     if !apiKey || !privateKey || !lang
       raise Error.new('100', lang)
     end
@@ -88,7 +91,8 @@ module Epayco
       headers = {
       :params => params,
       :content_type => 'application/json',
-      :type => 'sdk'
+      :type => 'sdk-jwt',
+      :Authorization => bearer_token,
      }.merge(headers)
 
       options = {
@@ -182,6 +186,36 @@ module Epayco
     file = File.read(File.dirname(__FILE__) + '/keylang.json')
     data_hash = JSON.parse(file)
     data_hash[key]
+  end
+
+
+  def self.authent(apiKey, privateKey)
+    @parmas = {}
+    @parmas["public_key"] = apiKey
+    @parmas["private_key"] = privateKey
+    headers = {
+      # :params => @parmas,
+      :Accept => 'application/json',
+      :content_type => 'application/json',
+      :type => 'sdk'
+     }
+    payload = @parmas.to_json
+    options = {
+      :headers => headers,
+      :user => apiKey,
+      :method => 'post',
+      :url => 'https://api.secure.payco.co/v1/auth/login',
+      :payload => payload
+     }
+
+    begin
+      response = execute_request(options)
+      return {} if response.code == 204 and method == :delete
+      JSON.parse(response.body, :symbolize_names => true)
+    rescue RestClient::Exception => e
+      handle_errors e
+    end
+
   end
 
 end
