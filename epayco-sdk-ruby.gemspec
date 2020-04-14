@@ -1,12 +1,12 @@
 # encoding: utf-8
 
 Gem::Specification.new do |s|
-  s.name              = "epayco-ruby"
-  s.version           = "0.0.6"
+  s.name              = "epayco-sdk-ruby"
+  s.version           = "0.0.9"
   s.summary           = "Ruby wrapper for Epayco API"
   s.description       = "API to interact with Epayco\nhttps://epayco.co"
-  s.authors           = ["Epayco development team", "Jonathan Aguirre"]
-  s.email             = ["jaguirre@payco.co"]
+  s.authors           = ["Epayco development team", "Ricardo Saldarriaga"]
+  s.email             = ["ricardo.saldarriaga@payco.co"]
   s.homepage          = "https://epayco.co/"
   s.files             = []
 
@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
     bin/epayco
     lib/epayco.rb
     lib/keylang.json
-    lib/epayco-ruby.rb
+    lib/epayco-sdk-ruby.rb
     lib/epayco/resources.rb
     lib/epayco/operations.rb
   }

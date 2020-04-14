@@ -20,7 +20,7 @@ $ gem install epayco-sdk-ruby
 ## Usage
 
 ```ruby
-require 'epayco-ruby'
+require 'epayco-sdk-ruby'
 
 Epayco.apiKey = 'YOU_PUBLIC_API_KEY'
 Epayco.privateKey = 'YOU_PRIVATE_API_KEY'
@@ -507,4 +507,5 @@ rescue Epayco::Error => e
   puts e
 end
 ```
+
 
