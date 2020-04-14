@@ -92,6 +92,7 @@ module Epayco
       :params => params,
       :content_type => 'application/json',
       :type => 'sdk-jwt',
+      :lang => 'RUBY',
       :Authorization => bearer_token,
      }.merge(headers)
 
