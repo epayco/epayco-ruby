@@ -325,7 +325,7 @@ end
 
 ```ruby
 begin
-  pse = Epayco::Bank.get "codigo_recibo"
+  pse = Epayco::Bank.get "ticketId"
 rescue Epayco::Error => e
   puts e
 end
