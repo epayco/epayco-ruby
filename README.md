@@ -336,6 +336,8 @@ end
 
 Previous requirements: https://docs.epayco.co/tools/split-payment
 
+### Split 1-1
+
 ```ruby
 pse_info = {
   #Other customary parameters...
@@ -352,6 +354,28 @@ rescue Epayco::Error => e
   puts e
 end
 ```
+### Split Multiple
+
+```ruby
+payment_info = {
+  #Other customary parameters...
+  splitpayment:"true",
+  split_app_id:"P_CUST_ID_CLIENTE APPLICATION",
+  split_merchant_id:"P_CUST_ID_CLIENTE COMMERCE",
+  split_type: "02",
+  split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
+  split_primary_receiver_fee: "10",
+  split_rule:"multiple",
+  split_receivers: [{id: "P_CUST_ID_CLIENTE 1 RECEIVER", total: "58000", iva: "8000", base_iva: "50000", fee: "10"},
+     {id: "P_CUST_ID_CLIENTE 2 RECEIVER", total: "58000", iva: "8000", base_iva: "50000", fee: "10"}]  
+}
+begin
+  split_pse = Epayco::Bank.create pse_info
+rescue Epayco::Error => e
+  puts e
+end
+```
+
 
 ### Cash
 
@@ -419,6 +443,8 @@ end
 
 Previous requirements: https://docs.epayco.co/tools/split-payment
 
+### Split 1-1
+
 ```ruby
 cash_info = {
   #Other customary parameters...
@@ -436,6 +462,27 @@ rescue Epayco::Error => e
 end
 ```
 
+### Split Multiple
+
+```ruby
+payment_info = {
+  #Other customary parameters...
+  splitpayment:"true",
+  split_app_id:"P_CUST_ID_CLIENTE APPLICATION",
+  split_merchant_id:"P_CUST_ID_CLIENTE COMMERCE",
+  split_type: "02",
+  split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
+  split_primary_receiver_fee: "10",
+  split_rule:"multiple",
+  split_receivers: [{id: "P_CUST_ID_CLIENTE 1 RECEIVER", total: "58000", iva: "8000", base_iva: "50000", fee: "10"},
+     {id: "P_CUST_ID_CLIENTE 2 RECEIVER", total: "58000", iva: "8000", base_iva: "50000", fee: "10"}]  
+}
+begin
+  split_cash = Epayco::Cash.create cash_info, "efecty"
+rescue Epayco::Error => e
+  puts e
+end
+```
 
 ### Payment
 
@@ -491,6 +538,8 @@ end
 
 Previous requirements: https://docs.epayco.co/tools/split-payment
 
+### Split 1-1
+
 ```ruby
 payment_info = {
   #Other customary parameters...
@@ -507,5 +556,28 @@ rescue Epayco::Error => e
   puts e
 end
 ```
+
+### Split Multiple
+
+```ruby
+payment_info = {
+  #Other customary parameters...
+  splitpayment:"true",
+  split_app_id:"P_CUST_ID_CLIENTE APPLICATION",
+  split_merchant_id:"P_CUST_ID_CLIENTE COMMERCE",
+  split_type: "02",
+  split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
+  split_primary_receiver_fee: "10",
+  split_rule:"multiple",
+  split_receivers: [{id: "P_CUST_ID_CLIENTE 1 RECEIVER", total: "58000", iva: "8000", base_iva: "50000", fee: "10"},
+     {id: "P_CUST_ID_CLIENTE 2 RECEIVER", total: "58000", iva: "8000", base_iva: "50000", fee: "10"}]  
+}
+begin
+  split_payment_info = Epayco::Charge.create payment_info
+rescue Epayco::Error => e
+  puts e
+end
+```
+
 
 
