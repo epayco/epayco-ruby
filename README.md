@@ -300,7 +300,7 @@ pse_info = {
   email: "no-responder@payco.co",
   country: "CO",
   cell_phone: "3010000001",
-  id: "190.000.000.000",  #client's IP, it is required
+  ip: "190.000.000.000",  #client's IP, it is required
   url_response: "https://tudominio.com/respuesta.php",
   url_confirmation: "https://tudominio.com/confirmacion.php",
   method_confirmation: "GET",
@@ -397,7 +397,7 @@ cash_info = {
     email: "test@mailinator.com",
     cell_phone: "3010000001",
     end_date: "2017-12-05",
-    id: "190.000.000.000",  #This is the client's IP, it is required
+    ip: "190.000.000.000",  #This is the client's IP, it is required
     url_response: "https://tudominio.com/respuesta.php",
     url_confirmation: "https://tudominio.com/confirmacion.php",
     method_confirmation: "GET",
@@ -502,7 +502,7 @@ payment_info = {
   value: "116000",
   tax: "16000",
   tax_base: "100000",
-  id: "190.000.000.000",  #This is the client's IP, it is required
+  ip: "190.000.000.000",  #This is the client's IP, it is required
   url_response: "https://tudominio.com/respuesta.php",
   url_confirmation: "https://tudominio.com/confirmacion.php",
   use_default_card_customer: true, # if the user wants to be charged with the card that the customer currently has as default = true
