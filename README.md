@@ -269,7 +269,7 @@ subscription_info = {
   url_confirmation: "https://tudominio.com/confirmacion.php",
   doc_type: "CC",
   doc_number: "5234567",
-  id: "190.000.000.000"  #This is the client's IP, it is required
+  ip: "190.000.000.000"  #This is the client's IP, it is required
 }
 
 begin
