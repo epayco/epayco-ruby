@@ -365,7 +365,7 @@ payment_info = {
   split_type: "02",
   split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
   split_primary_receiver_fee: "10",
-  split_rule:"multiple",
+  split_rule:"multiple", #si se envía este parámetro el campo split_receivers se vuelve obligatorio
   split_receivers: JSON.generate({:id =>'P_CUST_ID_CLIENTE 1 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'},
      {:id =>'P_CUST_ID_CLIENTE 2 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'}) #Puede añadir la cantidad de receptores que desee
 }
@@ -473,7 +473,7 @@ payment_info = {
   split_type: "02",
   split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
   split_primary_receiver_fee: "10",
-  split_rule:"multiple",
+  split_rule:"multiple",#si se envía este parámetro el campo split_receivers se vuelve obligatorio
   split_receivers: JSON.generate({:id =>'P_CUST_ID_CLIENTE 1 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'},
      {:id =>'P_CUST_ID_CLIENTE 2 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'}) #Puede añadir la cantidad de receptores que desee
 }
@@ -568,7 +568,7 @@ payment_info = {
   split_type: "02",
   split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
   split_primary_receiver_fee: "10",
-  split_rule:"multiple",
+  split_rule:"multiple", #si se envía este parámetro el campo split_receivers se vuelve obligatorio
   split_receivers: JSON.generate({:id =>'P_CUST_ID_CLIENTE 1 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'},
      {:id =>'P_CUST_ID_CLIENTE 2 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'}) #Puede añadir la cantidad de receptores que desee
 }
