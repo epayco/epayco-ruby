@@ -366,8 +366,8 @@ payment_info = {
   split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
   split_primary_receiver_fee: "10",
   split_rule:"multiple", #si se envía este parámetro el campo split_receivers se vuelve obligatorio
-  split_receivers: JSON.generate({:id =>'P_CUST_ID_CLIENTE 1 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'},
-     {:id =>'P_CUST_ID_CLIENTE 2 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'}) #Puede añadir la cantidad de receptores que desee
+  split_receivers: [{:id =>'P_CUST_ID_CLIENTE 1 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'},
+     {:id =>'P_CUST_ID_CLIENTE 2 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'}] #Puede añadir la cantidad de receptores que desee
 }
 begin
   split_pse = Epayco::Bank.create pse_info
@@ -474,8 +474,8 @@ payment_info = {
   split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
   split_primary_receiver_fee: "10",
   split_rule:"multiple",#si se envía este parámetro el campo split_receivers se vuelve obligatorio
-  split_receivers: JSON.generate({:id =>'P_CUST_ID_CLIENTE 1 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'},
-     {:id =>'P_CUST_ID_CLIENTE 2 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'}) #Puede añadir la cantidad de receptores que desee
+  split_receivers: [{:id =>'P_CUST_ID_CLIENTE 1 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'},
+     {:id =>'P_CUST_ID_CLIENTE 2 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'}] #Puede añadir la cantidad de receptores que desee
 }
 begin
   split_cash = Epayco::Cash.create cash_info, "efecty"
@@ -569,8 +569,8 @@ payment_info = {
   split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
   split_primary_receiver_fee: "10",
   split_rule:"multiple", #si se envía este parámetro el campo split_receivers se vuelve obligatorio
-  split_receivers: JSON.generate({:id =>'P_CUST_ID_CLIENTE 1 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'},
-     {:id =>'P_CUST_ID_CLIENTE 2 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'}) #Puede añadir la cantidad de receptores que desee
+  split_receivers: [{:id =>'P_CUST_ID_CLIENTE 1 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'},
+     {:id =>'P_CUST_ID_CLIENTE 2 RECEIVER', :total => '58000', :iva => '8000', :base_iva => '50000', :fee => '10'}] #Puede añadir la cantidad de receptores que desee
 }
 begin
   split_payment_info = Epayco::Charge.create payment_info
