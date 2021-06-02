@@ -155,7 +155,8 @@ module Epayco
     else
     @tags.each {
       |key, value|
-      @seted[lang_key(key)] = encrypt(value, Epayco.privateKey)
+      value_to_encrypt = value.kind_of?(Array) ? value.to_json : value
+      @seted[lang_key(key)] = encrypt(value_to_encrypt, Epayco.privateKey)
     }
     @seted["ip"] = encrypt(local_ip, Epayco.privateKey)
     @seted["enpruebas"] = encrypt(sandbox, Epayco.privateKey)
