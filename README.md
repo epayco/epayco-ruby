@@ -304,7 +304,7 @@ pse_info = {
   url_response: "https://tudominio.com/respuesta.php",
   url_confirmation: "https://tudominio.com/confirmacion.php",
   method_confirmation: "GET",
-  #Extra params: These params are optional and can be used by the commerce
+  #Los parámetros extras deben ser enviados tipo string, si se envía tipo array generara error.
   extra1: "",
   extra2: "",
   extra3: "",
@@ -401,7 +401,7 @@ cash_info = {
     url_response: "https://tudominio.com/respuesta.php",
     url_confirmation: "https://tudominio.com/confirmacion.php",
     method_confirmation: "GET",
-    #Extra params: These params are optional and can be used by the commerce
+    #Los parámetros extras deben ser enviados tipo string, si se envía tipo array generara error.
     extra1: "",
     extra2: "",
     extra3: "",
@@ -508,7 +508,7 @@ payment_info = {
   use_default_card_customer: true, # if the user wants to be charged with the card that the customer currently has as default = true
   currency: "COP",
   dues: "12",
-  #Extra params: These params are optional and can be used by the commerce
+  #Los parámetros extras deben ser enviados tipo string, si se envía tipo array generara error.
   extra1: "",
   extra2: "",
   extra3: "",
