@@ -281,6 +281,16 @@ end
 
 ### PSE
 
+#### Listar bancos
+```ruby
+begin
+   Bank = Epayco::Bank.list
+   puts Bank
+  rescue Epayco::Error => e
+   puts e
+end
+```
+
 #### Create
 
 ```ruby
