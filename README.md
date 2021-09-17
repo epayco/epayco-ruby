@@ -346,25 +346,7 @@ end
 
 Previous requirements: https://docs.epayco.co/tools/split-payment
 
-### Split 1-1
-
-```ruby
-pse_info = {
-  #Other customary parameters...
-  splitpayment:"true",
-  split_app_id:"P_CUST_ID_CLIENTE APPLICATION",
-  split_merchant_id:"P_CUST_ID_CLIENTE COMMERCE",
-  split_type: "02",
-  split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
-  split_primary_receiver_fee: "10"
-}
-begin
-  split_pse = Epayco::Bank.create pse_info
-rescue Epayco::Error => e
-  puts e
-end
-```
-### Split Multiple
+### Split payment
 
 ```ruby
 payment_info = {
@@ -453,26 +435,8 @@ end
 
 Previous requirements: https://docs.epayco.co/tools/split-payment
 
-### Split 1-1
 
-```ruby
-cash_info = {
-  #Other customary parameters...
-  splitpayment:"true",
-  split_app_id:"P_CUST_ID_CLIENTE APPLICATION",
-  split_merchant_id:"P_CUST_ID_CLIENTE COMMERCE",
-  split_type: "02",
-  split_primary_receiver:"P_CUST_ID_CLIENTE APPLICATION",
-  split_primary_receiver_fee: "10"
-}
-begin
-  split_cash = Epayco::Cash.create cash_info, "efecty"
-rescue Epayco::Error => e
-  puts e
-end
-```
-
-### Split Multiple
+### Split payment
 
 ```ruby
 payment_info = {
