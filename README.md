@@ -313,7 +313,7 @@ pse_info = {
   ip: "190.000.000.000",  #client's IP, it is required
   url_response: "https://tudominio.com/respuesta.php",
   url_confirmation: "https://tudominio.com/confirmacion.php",
-  metodoconfirmacion: "GET",
+  method_confirmation: "GET",
   #Los parámetros extras deben ser enviados tipo string, si se envía tipo array generara error.
   extra1: "",
   extra2: "",
