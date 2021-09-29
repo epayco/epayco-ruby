@@ -110,6 +110,7 @@ module Epayco
       #puts options
       #abort("Message goes here 1")
       response = execute_request(options)
+      #puts response.body
       return {} if response.code == 204 and method == :delete
       JSON.parse(response.body, :symbolize_names => true)
     rescue RestClient::Exception => e
