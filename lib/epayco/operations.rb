@@ -131,7 +131,7 @@ module Epayco
         sp=false
         dt=false
         if self.url == "plan"
-          url = "/recurring/v1/plan/remove/" + Epayco.apiKey + "/" + uid
+          url = "/recurring/v1/plan/remove/" + Epayco.apiKey + "/" + uid + "/"
         end
         Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
       end
