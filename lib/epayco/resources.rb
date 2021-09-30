@@ -36,7 +36,7 @@ module Epayco
   end
 
   class Bank < Resource
-    public_class_method :create, :get
+    public_class_method :create, :get, :list
   end
 
   class Cash < Resource

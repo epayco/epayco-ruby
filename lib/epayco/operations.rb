@@ -121,6 +121,8 @@ module Epayco
           url = "/recurring/v1/plans/" + Epayco.apiKey + "/"
         elsif self.url == "subscriptions"
           url = "/recurring/v1/subscriptions/" + Epayco.apiKey
+        elsif self.url == "bank"
+          url = "/restpagos/pse/bancos.json?public_key=" + Epayco.apiKey
         end
         Epayco.request :get, url, extra, params, self.switch, cashdata, sp, dt
       end
@@ -131,7 +133,7 @@ module Epayco
         sp=false
         dt=false
         if self.url == "plan"
-          url = "/recurring/v1/plan/remove/" + Epayco.apiKey + "/" + uid + "/"
+          url = "/recurring/v1/plan/remove/" + Epayco.apiKey + "/" + uid
         end
         Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
       end
