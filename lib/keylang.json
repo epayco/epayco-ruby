@@ -5,6 +5,7 @@
     "value": "valor",
     "tax": "iva",
     "tax_base": "baseiva",
+    "ico": "ico",
     "currency": "moneda",
     "type_person": "tipo_persona",
     "doc_type": "tipo_doc",
