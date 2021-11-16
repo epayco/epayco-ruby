@@ -27,8 +27,9 @@ module Epayco
   end
 
   # Endpoints
-  @api_base = 'https://api.secure.payco.co'
-  @api_base_secure = 'https://secure.payco.co'
+  @api_base = ENV["BASE_URL_SDK"] ? ENV["BASE_URL_SDK"] : 'https://api.secure.payco.co'
+  @api_base_secure = ENV["SECURE_URL_SDK"] ? ENV["SECURE_URL_SDK"] : 'https://secure.payco.co'
+  @api_entorno = ENV["ENTORNO_SDK"] ? ENV["ENTORNO_SDK"] : "/restpagos"
 
   # Init sdk parameters
   class << self
@@ -60,7 +61,7 @@ module Epayco
         payload = enc.to_json
         end
       end
-      url = @api_base_secure + url
+      url = @api_base_secure + @api_entorno + url
     else
       if method == :post || method == :patch
         rb_hash = JSON.parse(payload)

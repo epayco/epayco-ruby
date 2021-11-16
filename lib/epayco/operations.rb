@@ -16,26 +16,26 @@ module Epayco
         elsif self.url == "subscriptions"
           url = "/recurring/v1/subscription/create"
         elsif self.url == "bank"
-          url = "/restpagos/pagos/debitos.json"
+          url = "/pagos/debitos.json"
         elsif self.url == "safetypay"
           cashdata = false
           sp = true
-          url = "/restpagos/pagos/safetypays.json"
+          url = "/pagos/safetypays.json"
         elsif self.url == "cash"
           if extra == "efecty"
-            url = "/restpagos/v2/efectivo/efecty"
+            url = "/v2/efectivo/efecty"
             cashdata = true
           elsif extra == "baloto"
-            url = "/restpagos/v2/efectivo/baloto"
+            url = "/v2/efectivo/baloto"
             cashdata = true
           elsif extra == "gana"
-            url = "/restpagos/v2/efectivo/gana"
+            url = "/v2/efectivo/gana"
             cashdata = true
           elsif extra == "redservi"
-            url = "/restpagos/v2/efectivo/redservi"
+            url = "/v2/efectivo/redservi"
             cashdata = true
           elsif extra == "puntored"
-            url = "/restpagos/v2/efectivo/puntored"
+            url = "/v2/efectivo/puntored"
             cashdata = true
           else
             raise Error.new('109', Epayco.lang)
@@ -59,10 +59,10 @@ module Epayco
         elsif self.url == "subscriptions"
           url = "/recurring/v1/subscription/" + uid + "/" + Epayco.apiKey  + "/"
         elsif self.url == "bank"
-          url = "/restpagos/pse/transactioninfomation.json?transactionID=" + uid + "&public_key=" + Epayco.apiKey
+          url = "/pse/transactioninfomation.json?transactionID=" + uid + "&public_key=" + Epayco.apiKey
           switch = true
         elsif self.url == "cash" || self.url == "charge"
-          url = "/restpagos/transaction/response.json?ref_payco=" + uid + "&public_key=" + Epayco.apiKey
+          url = "/transaction/response.json?ref_payco=" + uid + "&public_key=" + Epayco.apiKey
           switch = true
         end
         Epayco.request :get, url, extra, params, switch, cashdata, sp, dt
@@ -122,7 +122,7 @@ module Epayco
         elsif self.url == "subscriptions"
           url = "/recurring/v1/subscriptions/" + Epayco.apiKey
         elsif self.url == "bank"
-          url = "/restpagos/pse/bancos.json?public_key=" + Epayco.apiKey
+          url = "/pse/bancos.json?public_key=" + Epayco.apiKey
         end
         Epayco.request :get, url, extra, params, self.switch, cashdata, sp, dt
       end
