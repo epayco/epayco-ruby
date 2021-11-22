@@ -207,7 +207,7 @@ module Epayco
       :headers => headers,
       :user => apiKey,
       :method => 'post',
-      :url => 'https://api.secure.payco.co/v1/auth/login',
+      :url => @api_base + '/v1/auth/login',
       :payload => payload
      }
 
