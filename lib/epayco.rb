@@ -4,6 +4,7 @@ require 'openssl'
 require 'base64'
 require 'open-uri'
 require 'socket'
+require 'dotenv/load'
 require_relative 'epayco/resources'
 
 module Epayco
