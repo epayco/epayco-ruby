@@ -7,6 +7,8 @@ module Epayco
       # Action create
       def create params={}, extra=nil
         dt=false
+        apify = false
+        cashdata = false
         if self.url == "token"
           url = "/v1/tokens"
         elsif self.url == "customers"
@@ -18,32 +20,30 @@ module Epayco
         elsif self.url == "bank"
           url = "/restpagos/pagos/debitos.json"
         elsif self.url == "safetypay"
-          cashdata = false
-          sp = true
-          url = "/restpagos/pagos/safetypays.json"
+          apify = true
+          url = "/payment/process/safetypay"
         elsif self.url == "cash"
+          cashdata = true
           if extra == "efecty"
             url = "/restpagos/v2/efectivo/efecty"
-            cashdata = true
           elsif extra == "baloto"
             url = "/restpagos/v2/efectivo/baloto"
-            cashdata = true
           elsif extra == "gana"
             url = "/restpagos/v2/efectivo/gana"
-            cashdata = true
           elsif extra == "redservi"
             url = "/restpagos/v2/efectivo/redservi"
-            cashdata = true
           elsif extra == "puntored"
             url = "/restpagos/v2/efectivo/puntored"
-            cashdata = true
           else
             raise Error.new('109', Epayco.lang)
           end
         elsif self.url == "charge"
           url = "/payment/v1/charge/create"
+        elsif self.url == "daviplata"
+          url = "/payment/process/daviplata"
+          apify = true
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
+        Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt, apify
       end
 
       # Action retrieve from id
@@ -160,6 +160,19 @@ module Epayco
         end
         Epayco.request :post, url, extra, params, self.switch, cashdata, sp, dt
       end
+
+      def confirm params={}
+        cashdata=false
+        sp=false
+        dt=false
+        apify=true
+        if self.url == "daviplata"
+          url = "/payment/confirm/daviplata"
+        end
+        Epayco.request :post, url, nil, params, self.switch, cashdata, sp, , apify
+
+      end
+
 
     end
 
