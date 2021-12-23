@@ -52,11 +52,11 @@ module Epayco
 
     # Switch secure or api or apify
     if apify 
-      tags = JSON.parse(payload)
+      @tags = JSON.parse(payload)
       seted = {}
       file = File.read(File.dirname(__FILE__) + '/keylang_apify.json')
       data_hash = JSON.parse(file)
-      tags.each {
+      @tags.each {
         |key, value|
         if data_hash[key]
           seted[data_hash[key]] = value
