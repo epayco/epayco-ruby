@@ -37,7 +37,7 @@ module Epayco
   end
 
   # Eject request and show response or error
-  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata,  dt, apify=nil)
+  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, dt, apify)
     method = method.to_sym
 
     auth = authent(apiKey ,privateKey)
@@ -62,6 +62,7 @@ module Epayco
           seted[data_hash[key]] = value
         else
           seted[key] = value
+        end
       }
       payload = seted.to_json
       url = @api_base_apify + url
