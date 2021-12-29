@@ -16,7 +16,7 @@ module Epayco
 
     # Get code, lang and show custom error
     def initialize code, lang
-      file = open("https://s3-us-west-2.amazonaws.com/epayco/message_api/errors.json").read
+      file = open("https://multimedia.epayco.co/message-api/errors.json").read
       data_hash = JSON.parse(file)
       super data_hash[code][lang]
       @errors = errors
@@ -31,6 +31,7 @@ module Epayco
   @api_base = ENV["BASE_URL_SDK"] ? ENV["BASE_URL_SDK"] : 'https://api.secure.payco.co'
   @api_base_secure = ENV["SECURE_URL_SDK"] ? ENV["SECURE_URL_SDK"] : 'https://secure.payco.co'
   @api_entorno = ENV["ENTORNO_SDK"] ? ENV["ENTORNO_SDK"] : "/restpagos"
+  @api_base_apify = ENV["BASE_URL_APIFY"] ? ENV["BASE_URL_APIFY"] :"https://apify.epayco.co"
 
   # Init sdk parameters
   class << self
@@ -38,7 +39,7 @@ module Epayco
   end
 
   # Eject request and show response or error
-  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, sp,  dt)
+  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, dt, apify)
     method = method.to_sym
 
     auth = authent(apiKey ,privateKey)
@@ -51,8 +52,23 @@ module Epayco
     payload = JSON.generate(params) if method == :post || method == :patch
     params = nil unless method == :get
 
-    # Switch secure or api
-    if switch
+    # Switch secure or api or apify
+    if apify 
+      @tags = JSON.parse(payload)
+      seted = {}
+      file = File.read(File.dirname(__FILE__) + '/keylang_apify.json')
+      data_hash = JSON.parse(file)
+      @tags.each {
+        |key, value|
+        if data_hash[key]
+          seted[data_hash[key]] = value
+        else
+          seted[key] = value
+        end
+      }
+      payload = seted.to_json
+      url = @api_base_apify + url
+    elsif  switch
       if method == :post || method == :patch
         if cashdata
         enc = encrypt_aes(payload, true)
@@ -77,36 +93,23 @@ module Epayco
       url = @api_base + url
     end
 
-    if sp
-       headers = {
-      :content_type => 'multipart/form-data'
-     }.merge(headers)
+   
+    headers = {
+    :params => params,
+    :content_type => 'application/json',
+    :type => 'sdk-jwt',
+    :lang => 'RUBY',
+    :Authorization => bearer_token,
+    }.merge(headers)
 
-      options = {
-      :headers => headers,
-      :user => apiKey,
-      :method => method,
-      :url => url,
-      :payload => payload
-     }
-    else
-      headers = {
-      :params => params,
-      :content_type => 'application/json',
-      :type => 'sdk-jwt',
-      :lang => 'RUBY',
-      :Authorization => bearer_token,
-     }.merge(headers)
+    options = {
+    :headers => headers,
+    :user => apiKey,
+    :method => method,
+    :url => url,
+    :payload => payload
+    }
 
-      options = {
-      :headers => headers,
-      :user => apiKey,
-      :method => method,
-      :url => url,
-      :payload => payload
-     }
-
-    end
     # Open library rest client
     begin
       #puts options
@@ -191,7 +194,6 @@ module Epayco
     data_hash = JSON.parse(file)
     data_hash[key]
   end
-
 
   def self.authent(apiKey, privateKey)
     @parmas = {}
