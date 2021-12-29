@@ -20,14 +20,8 @@ module Epayco
         elsif self.url == "bank"
           url = "/pagos/debitos.json"
         elsif self.url == "safetypay"
-<<<<<<< HEAD
-          cashdata = false
-          sp = true
-          url = "/pagos/safetypays.json"
-=======
           apify = true
           url = "/payment/process/safetypay"
->>>>>>> feature/daviplata
         elsif self.url == "cash"
           cashdata = true
           if extra == "efecty"
