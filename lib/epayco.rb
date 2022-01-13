@@ -18,12 +18,18 @@ module Epayco
     def initialize code, lang
       file = open("https://multimedia.epayco.co/message-api/errors.json").read
       data_hash = JSON.parse(file)
-      super data_hash[code][lang]
-      @errors = errors
+      error = "Error"
+      if(data_hash[code.to_s])
+        error = [data_hash[code.to_s][lang]]
+      else
+        error = [code, lang]
+      end
+      super error
+      @errors = error
     end
 
     def each
-      @errors.each { |e| yield *e.first }
+      @errors.each { |e| yield *e }
     end
   end
 
@@ -42,8 +48,8 @@ module Epayco
   def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, dt, apify)
     method = method.to_sym
 
-    auth = authent(apiKey ,privateKey)
-    bearer_token = 'Bearer '+ auth[:bearer_token]
+    auth = authent(apiKey ,privateKey, apify)
+    bearer_token = 'Bearer '+ (auth[:bearer_token] || auth[:token])
 
     if !apiKey || !privateKey || !lang
       raise Error.new('100', lang)
@@ -195,25 +201,30 @@ module Epayco
     data_hash[key]
   end
 
-  def self.authent(apiKey, privateKey)
+  def self.authent(apiKey, privateKey, apify)
     @parmas = {}
     @parmas["public_key"] = apiKey
     @parmas["private_key"] = privateKey
+    
     headers = {
       # :params => @parmas,
       :Accept => 'application/json',
       :content_type => 'application/json',
       :type => 'sdk'
-     }
+    }
+    url = @api_base + '/v1/auth/login'
+    if(apify)
+      headers[:Authorization] = "Basic" + Base64.strict_encode64(apiKey + ":" + privateKey)
+      url = @api_base_apify + '/login'
+    end
     payload = @parmas.to_json
     options = {
       :headers => headers,
       :user => apiKey,
       :method => 'post',
-      :url => @api_base + '/v1/auth/login',
-      :payload => payload
+      :url => url,
+      :payload => if apify then nil else payload end
      }
-
     begin
       response = execute_request(options)
       return {} if response.code == 204 and method == :delete
