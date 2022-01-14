@@ -19,9 +19,10 @@ module Epayco
       data_hash = JSON.parse(file)
       error = "Error"
       if(data_hash[code.to_s])
-        error = data_hash[code.to_s][lang]
+        error = [data_hash[code.to_s][lang]]
       else
-        error = lang
+        error = [code, lang]
+      end
       super error
       @errors = error
     end
@@ -45,7 +46,7 @@ module Epayco
   def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, dt, apify)
     method = method.to_sym
 
-    auth = authent(apiKey ,privateKey, apify)
+    auth = authent(apiKey, privateKey, apify, lang)
     bearer_token = 'Bearer '+ (auth[:bearer_token] || auth[:token])
 
     if !apiKey || !privateKey || !lang
@@ -198,7 +199,7 @@ module Epayco
     data_hash[key]
   end
 
-  def self.authent(apiKey, privateKey, apify)
+  def self.authent(apiKey, privateKey, apify, lang)
     @parmas = {}
     @parmas["public_key"] = apiKey
     @parmas["private_key"] = privateKey
@@ -225,7 +226,9 @@ module Epayco
     begin
       response = execute_request(options)
       return {} if response.code == 204 and method == :delete
-      JSON.parse(response.body, :symbolize_names => true)
+      body = JSON.parse(response.body, :symbolize_names => true)
+      return body if body[:bearer_token] || body[:token]
+      raise Error.new("104", lang)
     rescue RestClient::Exception => e
       handle_errors e
     end
