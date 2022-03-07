@@ -212,7 +212,7 @@ module Epayco
     }
     url = 'https://api.secure.payco.co/v1/auth/login'
     if(apify)
-      headers[:Authorization] = "Basic" + Base64.strict_encode64(apiKey + ":" + privateKey)
+      headers[:Authorization] = "Basic " + Base64.strict_encode64(apiKey + ":" + privateKey)
       url = 'https://apify.epayco.co/login'
     end
     payload = @parmas.to_json
