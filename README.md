@@ -394,7 +394,7 @@ cash_info = {
     ip: "190.000.000.000",  #This is the client's IP, it is required
     url_response: "https://tudominio.com/respuesta.php",
     url_confirmation: "https://tudominio.com/confirmacion.php",
-    method_confirmation: "GET",
+    metodoconfirmacion: "GET",
     #Los parámetros extras deben ser enviados tipo string, si se envía tipo array generara error.
     extra1: "",
     extra2: "",
@@ -483,6 +483,7 @@ payment_info = {
   ip: "190.000.000.000",  #This is the client's IP, it is required
   url_response: "https://tudominio.com/respuesta.php",
   url_confirmation: "https://tudominio.com/confirmacion.php",
+  method_confirmation: "GET",
   use_default_card_customer: true, # if the user wants to be charged with the card that the customer currently has as default = true
   currency: "COP",
   dues: "12",
