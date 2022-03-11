@@ -15,20 +15,27 @@ module Epayco
 
     # Get code, lang and show custom error
     def initialize code, lang
-      file = open("https://s3-us-west-2.amazonaws.com/epayco/message_api/errors.json").read
+      file = open("https://multimedia.epayco.co/message-api/errors.json").read
       data_hash = JSON.parse(file)
-      super data_hash[code][lang]
-      @errors = errors
+      error = "Error"
+      if(data_hash[code.to_s])
+        error = [data_hash[code.to_s][lang]]
+      else
+        error = [code, lang]
+      end
+      super error
+      @errors = error
     end
 
     def each
-      @errors.each { |e| yield *e.first }
+      @errors.each { |e| yield *e }
     end
   end
 
   # Endpoints
   @api_base = 'https://api.secure.payco.co'
   @api_base_secure = 'https://secure.payco.co'
+  @api_base_apify = "https://apify.epayco.co"
 
   # Init sdk parameters
   class << self
@@ -36,11 +43,11 @@ module Epayco
   end
 
   # Eject request and show response or error
-  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, sp,  dt)
+  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, dt, apify)
     method = method.to_sym
 
-    auth = authent(apiKey ,privateKey)
-    bearer_token = 'Bearer '+ auth[:bearer_token]
+    auth = authent(apiKey, privateKey, apify, lang)
+    bearer_token = 'Bearer '+ (auth[:bearer_token] || auth[:token])
 
     if !apiKey || !privateKey || !lang
       raise Error.new('100', lang)
@@ -49,8 +56,23 @@ module Epayco
     payload = JSON.generate(params) if method == :post || method == :patch
     params = nil unless method == :get
 
-    # Switch secure or api
-    if switch
+    # Switch secure or api or apify
+    if apify 
+      @tags = JSON.parse(payload)
+      seted = {}
+      file = File.read(File.dirname(__FILE__) + '/keylang_apify.json')
+      data_hash = JSON.parse(file)
+      @tags.each {
+        |key, value|
+        if data_hash[key]
+          seted[data_hash[key]] = value
+        else
+          seted[key] = value
+        end
+      }
+      payload = seted.to_json
+      url = @api_base_apify + url
+    elsif  switch
       if method == :post || method == :patch
         if cashdata
         enc = encrypt_aes(payload, true)
@@ -75,36 +97,23 @@ module Epayco
       url = @api_base + url
     end
 
-    if sp
-       headers = {
-      :content_type => 'multipart/form-data'
-     }.merge(headers)
+   
+    headers = {
+    :params => params,
+    :content_type => 'application/json',
+    :type => 'sdk-jwt',
+    :lang => 'RUBY',
+    :Authorization => bearer_token,
+    }.merge(headers)
 
-      options = {
-      :headers => headers,
-      :user => apiKey,
-      :method => method,
-      :url => url,
-      :payload => payload
-     }
-    else
-      headers = {
-      :params => params,
-      :content_type => 'application/json',
-      :type => 'sdk-jwt',
-      :lang => 'RUBY',
-      :Authorization => bearer_token,
-     }.merge(headers)
+    options = {
+    :headers => headers,
+    :user => apiKey,
+    :method => method,
+    :url => url,
+    :payload => payload
+    }
 
-      options = {
-      :headers => headers,
-      :user => apiKey,
-      :method => method,
-      :url => url,
-      :payload => payload
-     }
-
-    end
     # Open library rest client
     begin
       #puts options
@@ -190,30 +199,36 @@ module Epayco
     data_hash[key]
   end
 
-
-  def self.authent(apiKey, privateKey)
+  def self.authent(apiKey, privateKey, apify, lang)
     @parmas = {}
     @parmas["public_key"] = apiKey
     @parmas["private_key"] = privateKey
+    
     headers = {
       # :params => @parmas,
       :Accept => 'application/json',
       :content_type => 'application/json',
       :type => 'sdk'
-     }
+    }
+    url = 'https://api.secure.payco.co/v1/auth/login'
+    if(apify)
+      headers[:Authorization] = "Basic " + Base64.strict_encode64(apiKey + ":" + privateKey)
+      url = 'https://apify.epayco.co/login'
+    end
     payload = @parmas.to_json
     options = {
       :headers => headers,
       :user => apiKey,
       :method => 'post',
-      :url => 'https://api.secure.payco.co/v1/auth/login',
-      :payload => payload
+      :url => url,
+      :payload => if apify then nil else payload end
      }
-
     begin
       response = execute_request(options)
       return {} if response.code == 204 and method == :delete
-      JSON.parse(response.body, :symbolize_names => true)
+      body = JSON.parse(response.body, :symbolize_names => true)
+      return body if body[:bearer_token] || body[:token]
+      raise Error.new("104", lang)
     rescue RestClient::Exception => e
       handle_errors e
     end
