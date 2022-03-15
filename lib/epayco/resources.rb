@@ -51,4 +51,8 @@ module Epayco
     public_class_method :create
   end
 
+  class Daviplata < Resource
+    public_class_method :create, :confirm
+  end
+
 end
