@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name              = "epayco-sdk-ruby"
-  s.version           = "1.0.3"
+  s.version           = "1.1.1"
   s.summary           = "Ruby wrapper for Epayco API"
   s.description       = "API to interact with Epayco\nhttps://epayco.co"
   s.authors           = ["Epayco development team", "Ricardo Saldarriaga", "Gerson Vasquez"]
@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
     bin/epayco
     lib/epayco.rb
     lib/keylang.json
+    lib/keylang_apify.json
     lib/epayco-sdk-ruby.rb
     lib/epayco/resources.rb
     lib/epayco/operations.rb

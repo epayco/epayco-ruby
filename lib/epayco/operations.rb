@@ -24,19 +24,18 @@ module Epayco
           url = "/payment/process/safetypay"
         elsif self.url == "cash"
           cashdata = true
-          if extra == "efecty"
-            url = "/restpagos/v2/efectivo/efecty"
-          elsif extra == "baloto"
-            url = "/restpagos/v2/efectivo/baloto"
-          elsif extra == "gana"
-            url = "/restpagos/v2/efectivo/gana"
-          elsif extra == "redservi"
-            url = "/restpagos/v2/efectivo/redservi"
-          elsif extra == "puntored"
-            url = "/restpagos/v2/efectivo/puntored"
-          else
-            raise Error.new('109', Epayco.lang)
+          methods_payment = Epayco.request :get, "/payment/cash/entities", extra, {}, false, false, dt, true
+          
+          if methods_payment[:data].nil? && !methods_payment[:data].kind_of?(Array) 
+            raise Error.new('106', Epayco.lang)
           end
+          entities = methods_payment[:data].map do |item|
+            item[:name].downcase
+          end
+          if !entities.include? extra.downcase
+            raise Error.new('109', Epayco.lang)
+          end 
+          url = "/restpagos/v2/efectivo/" + extra
         elsif self.url == "charge"
           url = "/payment/v1/charge/create"
         elsif self.url == "daviplata"
@@ -52,11 +51,11 @@ module Epayco
         cashdata=false
         dt=false
         if self.url == "customers"
-          url = "/payment/v1/customer/" + Epayco.apiKey + "/" + uid + "/"
+          url = "/payment/v1/customer/" + Epayco.apiKey + "/" + uid
         elsif self.url == "plan"
-          url = "/recurring/v1/plan/" + Epayco.apiKey + "/" + uid + "/"
+          url = "/recurring/v1/plan/" + Epayco.apiKey + "/" + uid
         elsif self.url == "subscriptions"
-          url = "/recurring/v1/subscription/" + uid + "/" + Epayco.apiKey  + "/"
+          url = "/recurring/v1/subscription/" + uid + "/" + Epayco.apiKey
         elsif self.url == "bank"
           url = "/restpagos/pse/transactioninfomation.json?transactionID=" + uid + "&public_key=" + Epayco.apiKey
           switch = true
@@ -72,7 +71,7 @@ module Epayco
         cashdata=false
         dt=false
         if self.url == "customers"
-          url = "/payment/v1/customer/edit/" + Epayco.apiKey + "/" + uid + "/"
+          url = "/payment/v1/customer/edit/" + Epayco.apiKey + "/" + uid
         end
         Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false
       end
@@ -110,9 +109,9 @@ module Epayco
         cashdata=false
         dt=false
         if self.url == "customers"
-          url = "/payment/v1/customers/" + Epayco.apiKey + "/"
+          url = "/payment/v1/customers/" + Epayco.apiKey
         elsif self.url == "plan"
-          url = "/recurring/v1/plans/" + Epayco.apiKey + "/"
+          url = "/recurring/v1/plans/" + Epayco.apiKey
         elsif self.url == "subscriptions"
           url = "/recurring/v1/subscriptions/" + Epayco.apiKey
         elsif self.url == "bank"
