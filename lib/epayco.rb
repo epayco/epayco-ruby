@@ -60,19 +60,21 @@ module Epayco
 
     # Switch secure or api or apify
     if apify 
-      @tags = JSON.parse(payload)
-      seted = {}
-      file = File.read(File.dirname(__FILE__) + '/keylang_apify.json')
-      data_hash = JSON.parse(file)
-      @tags.each {
-        |key, value|
-        if data_hash[key]
-          seted[data_hash[key]] = value
-        else
-          seted[key] = value
-        end
-      }
-      payload = seted.to_json
+      if  method == :post
+        @tags = JSON.parse(payload)
+        seted = {}
+        file = File.read(File.dirname(__FILE__) + '/keylang_apify.json')
+        data_hash = JSON.parse(file)
+        @tags.each {
+          |key, value|
+          if data_hash[key]
+            seted[data_hash[key]] = value
+          else
+            seted[key] = value
+          end
+        }
+        payload = seted.to_json
+      end
       url = @api_base_apify + url
     elsif  switch
       if method == :post || method == :patch
@@ -118,10 +120,7 @@ module Epayco
 
     # Open library rest client
     begin
-      #puts options
-      #abort("Message goes here 1")
       response = execute_request(options)
-      #puts response.body
       return {} if response.code == 204 and method == :delete
       JSON.parse(response.body, :symbolize_names => true)
     rescue RestClient::Exception => e
