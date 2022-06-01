@@ -24,13 +24,20 @@ module Epayco
           url = "/payment/process/safetypay"
         elsif self.url == "cash"
           cashdata = true
+          if extra.downcase == 'baloto'
+            raise Error.new('109', Epayco.lang)
+          end
           methods_payment = Epayco.request :get, "/payment/cash/entities", extra, {}, false, false, dt, true
           
-          if methods_payment[:data].nil? && !methods_payment[:data].kind_of?(Array) 
+          if(methods_payment[:success].nil? || !methods_payment[:success])
+            raise Error.new('104', Epayco.lang)
+          end
+
+          if methods_payment[:data].nil? || !methods_payment[:data].kind_of?(Array) 
             raise Error.new('106', Epayco.lang)
           end
           entities = methods_payment[:data].map do |item|
-            item[:name].downcase
+            item[:name].gsub(/\s+/, "").downcase
           end
           if !entities.include? extra.downcase
             raise Error.new('109', Epayco.lang)
