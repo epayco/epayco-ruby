@@ -56,6 +56,8 @@ customer_info = {
   last_name: "Doe", #This parameter is optional
   email: "joe@payco.co",
   phone: "3005234321",
+  city: "Bogota",
+  address: "Cr 4 # 55 36",
   default: true
 }
 
@@ -309,6 +311,7 @@ pse_info = {
   last_name: "PAYCO",
   email: "no-responder@payco.co",
   country: "CO",
+  city: "Bogota",
   cell_phone: "3010000001",
   ip: "190.000.000.000",  #client's IP, it is required
   url_response: "https://tudominio.com/respuesta.php",
@@ -391,6 +394,8 @@ cash_info = {
     email: "test@mailinator.com",
     cell_phone: "3010000001",
     end_date: "2017-12-05",
+    country: "CO",
+    city: "bogota",
     ip: "190.000.000.000",  #This is the client's IP, it is required
     url_response: "https://tudominio.com/respuesta.php",
     url_confirmation: "https://tudominio.com/confirmacion.php",
@@ -481,6 +486,8 @@ payment_info = {
   tax: "16000",
   tax_base: "100000",
   ip: "190.000.000.000",  #This is the client's IP, it is required
+  country: "CO",
+  city: "bogota",
   url_response: "https://tudominio.com/respuesta.php",
   url_confirmation: "https://tudominio.com/confirmacion.php",
   method_confirmation: "GET",
@@ -560,5 +567,111 @@ rescue Epayco::Error => e
 end
 ```
 
+### Daviplata
+
+### Create
+```ruby
+payment_info = {
+    doc_type: "CC",
+    document: "1053814580414720",
+    name: "Testing",
+    last_name: "PAYCO",
+    email: "exmaple@epayco.co",
+    ind_country: "57",
+    phone: "314853222200033",
+    country: "CO",
+    city: "bogota",
+    address: "Calle de prueba",
+    ip: "189.176.0.1",
+    currency: "COP",
+    description: "ejemplo de transaccion con daviplata",
+    value: "100",
+    tax: "0",
+    ico: "0"
+    tax_base: "0",
+    method_confirmation: "GET",
+    url_response: "https://tudominio.com/respuesta.php",
+    url_confirmation: "https://tudominio.com/confirmacion.php",
+    extra1: "",      
+    extra2: "",
+    extra3: "",
+    extra4: "",
+    extra5: "",  
+    extra6: "",
+    extra7: "",
+    extra8: "",
+    extra9: "",
+    extra10: ""
+}
+
+begin
+  daviplata = Epayco::Daviplata.create payment_info
+rescue Epayco::Error => e
+  puts e
+end
+```
+
+### confirm transaccion
+
+```ruby
+confirm = {
+    ref_payco: "45508846", # It is obtained from the create response
+    id_session_token: "45081749", # It is obtained from the create response
+    otp: "2580"
+}
+begin
+  daviplata = Epayco::Daviplata.confirm confirm
+rescue Epayco::Error => e
+  puts e
+end  
+```
+
+### Safetypay
+
+### Create
+
+```ruby 
+payment_info = {
+    cash: "1",
+    end_date: "2021-08-05",
+    doc_type: "CC",
+    document: "123456789",
+    name: "Jhon",
+    last_name: "doe",
+    email: "jhon.doe@yopmail.com",
+    ind_country: "57",
+    phone: "3003003434",
+    country: "CO",
+    invoice: "fac-01", # opcional
+    city: "N/A",
+    address: "N/A",
+    ip: "192.168.100.100",
+    currency: "COP",
+    description: "Thu Jun 17 2021 11:37:01 GMT-0400 (hora de Venezuela)",
+    value: 100000,
+    tax: 0,
+    ico: 0,
+    tax_base: 0,
+    url_confirmation: "https://tudominio.com/respuesta.php",
+    url_response: "https://tudominio.com/respuesta.php",
+    method_confirmation: "POST",
+    extra1: "",      
+    extra2: "",
+    extra3: "",
+    extra4: "",
+    extra5: "",  
+    extra6: "",
+    extra7: "",
+    extra8: "",
+    extra9: "",
+    extra10: ""
+}
+begin
+  safetypay = Epayco::Safetypay.create payment_info
+rescue Epayco::Error => e
+  puts e
+end  
+
+```
 
 
