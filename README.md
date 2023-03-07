@@ -76,6 +76,22 @@ rescue Epayco::Error => e
 end
 ```
 
+```ruby
+begin
+  customer = Epayco::Customers.getCustomer "id_customer","4010c85ce7a27bf450058e3" 
+rescue Epayco::Error => e
+  puts e
+end
+```
+
+```ruby
+begin
+  customer = Epayco::Customers.getCustomer "email","joe@payco.co" 
+rescue Epayco::Error => e
+  puts e
+end
+```
+
 #### List
 
 ```ruby

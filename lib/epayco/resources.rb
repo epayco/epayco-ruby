@@ -24,7 +24,7 @@ module Epayco
   end
 
   class Customers < Resource
-    public_class_method :create, :get, :list, :update, :updatetoken, :delatetetoken, :addtoken
+    public_class_method :create, :get, :list, :update, :updatetoken, :delatetetoken, :addtoken, :getCustomer
   end
 
   class Plan < Resource
