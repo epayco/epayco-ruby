@@ -33,9 +33,9 @@ module Epayco
   end
 
   # Endpoints
-  @api_base = 'https://api.secure.payco.co'
+  @api_base = 'https://api.secure.epayco.io'
   @api_base_secure = 'https://secure.payco.co'
-  @api_base_apify = "https://apify.epayco.co"
+  @api_base_apify = "https://apify.epayco.io"
 
   # Init sdk parameters
   class << self
@@ -210,10 +210,10 @@ module Epayco
       :content_type => 'application/json',
       :type => 'sdk'
     }
-    url = 'https://api.secure.payco.co/v1/auth/login'
+    url = 'https://api.secure.epayco.io/v1/auth/login'
     if(apify)
       headers[:Authorization] = "Basic " + Base64.strict_encode64(apiKey + ":" + privateKey)
-      url = 'https://apify.epayco.co/login'
+      url = 'https://apify.epayco.io/login'
     end
     payload = @parmas.to_json
     options = {
