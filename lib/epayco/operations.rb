@@ -105,6 +105,16 @@ module Epayco
         Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false
       end
 
+      def getCustomer type, uid, extra=nil
+        if self.url == "customers"
+          url = "/payment/v1/customer/find?" + type + "=" + uid
+          puts url
+          cashdata = false
+          dt = true
+        end
+        Epayco.request :get, url, extra, {}, switch, cashdata, dt, apify = false
+      end
+
       # Action retrieve all documents from user
       def list params={}, extra=nil
         cashdata=false
