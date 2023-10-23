@@ -15,7 +15,7 @@ module Epayco
 
     # Get code, lang and show custom error
     def initialize code, lang
-      file = open("https://multimedia.epayco.co/message-api/errors.json").read
+      file = open(File.dirname(__FILE__) + "/errors.json").read
       data_hash = JSON.parse(file)
       error = "Error"
       if(data_hash[code.to_s])
@@ -34,7 +34,7 @@ module Epayco
 
   # Endpoints
   @api_base = 'https://api.secure.epayco.io'
-  @api_base_secure = 'https://secure.payco.co'
+  @api_base_secure = 'https://secure2.epayco.io'
   @api_base_apify = "https://apify.epayco.io"
 
   # Init sdk parameters
@@ -52,10 +52,10 @@ module Epayco
     if !apiKey || !privateKey || !lang
       raise Error.new('100', lang)
     end
-
+    params["extras_epayco"] = {extra5:"P45"}
     payload = JSON.generate(params) if method == :post || method == :patch
     params = nil unless method == :get
-
+    
     # Switch secure or api or apify
     if apify 
       @tags = JSON.parse(payload)
@@ -116,10 +116,7 @@ module Epayco
 
     # Open library rest client
     begin
-      #puts options
-      #abort("Message goes here 1")
       response = execute_request(options)
-      #puts response.body
       return {} if response.code == 204 and method == :delete
       JSON.parse(response.body, :symbolize_names => true)
     rescue RestClient::Exception => e
@@ -163,16 +160,20 @@ module Epayco
       @seted["ip"] = local_ip
       @seted["enpruebas"] = encrypt(sandbox, Epayco.privateKey)
     else
-    @tags.each {
-      |key, value|
-      @seted[lang_key(key)] = encrypt(value, Epayco.privateKey)
-    }
-    @seted["ip"] = encrypt(local_ip, Epayco.privateKey)
-    @seted["enpruebas"] = encrypt(sandbox, Epayco.privateKey)
+      @tags.each {
+        |key, value|
+        if lang_key(key) != "extras_epayco"
+          @seted[lang_key(key)] = encrypt(value, Epayco.privateKey)
+        else
+          @seted[lang_key(key)] = {extra5:encrypt(value["extra5"], Epayco.privateKey)}
+        end  
+      }
+      @seted["ip"] = encrypt(local_ip, Epayco.privateKey)
+      @seted["enpruebas"] = encrypt(sandbox, Epayco.privateKey)
     end
 
-    
-    
+
+
     
     @seted["public_key"] = Epayco.apiKey
     @seted["i"] = Base64.encode64("0000000000000000")
@@ -210,10 +211,10 @@ module Epayco
       :content_type => 'application/json',
       :type => 'sdk'
     }
-    url = 'https://api.secure.epayco.io/v1/auth/login'
+    url = @api_base+'/v1/auth/login'
     if(apify)
       headers[:Authorization] = "Basic " + Base64.strict_encode64(apiKey + ":" + privateKey)
-      url = 'https://apify.epayco.io/login'
+      url = @api_base_apify+'/login'
     end
     payload = @parmas.to_json
     options = {
