@@ -32,5 +32,6 @@
     "split_primary_receiver": "split_primary_receiver",
     "split_primary_receiver_fee": "split_primary_receiver_fee",
     "split_rule": "split_rule",
-    "split_receivers": "split_receivers"
+    "split_receivers": "split_receivers",
+    "extras_epayco": "extras_epayco"
 }

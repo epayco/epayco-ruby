@@ -34,6 +34,8 @@ module Epayco
             url = "/restpagos/v2/efectivo/redservi"
           elsif extra == "puntored"
             url = "/restpagos/v2/efectivo/puntored"
+          elsif extra == "sured"
+            url = "/restpagos/v2/efectivo/sured"  
           else
             raise Error.new('109', Epayco.lang)
           end
