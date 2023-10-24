@@ -54,7 +54,7 @@ module Epayco
     if !apiKey || !privateKey || !lang
       raise Error.new('100', lang)
     end
-
+    params["extras_epayco"] = {extra5:"P45"}
     payload = JSON.generate(params) if method == :post || method == :patch
     params = nil unless method == :get
 
@@ -166,7 +166,11 @@ module Epayco
     else
     @tags.each {
       |key, value|
-      @seted[lang_key(key)] = encrypt(value, Epayco.privateKey)
+      if lang_key(key) != "extras_epayco"
+          @seted[lang_key(key)] = encrypt(value, Epayco.privateKey)
+        else
+        @seted[lang_key(key)] = {extra5:encrypt(value["extra5"], Epayco.privateKey)}
+      end   
     }
     @seted["ip"] = encrypt(local_ip, Epayco.privateKey)
     @seted["enpruebas"] = encrypt(sandbox, Epayco.privateKey)
