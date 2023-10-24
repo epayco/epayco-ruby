@@ -15,7 +15,7 @@ module Epayco
 
     # Get code, lang and show custom error
     def initialize code, lang
-      file = open(File.dirname(__FILE__) + "/errors.json").read
+      file = open("https://multimedia.epayco.co/message-api/errors.json").read
       data_hash = JSON.parse(file)
       error = "Error"
       if(data_hash[code.to_s])
@@ -33,9 +33,9 @@ module Epayco
   end
 
   # Endpoints
-  @api_base = 'https://api.secure.epayco.io'
-  @api_base_secure = 'https://secure2.epayco.io'
-  @api_base_apify = "https://apify.epayco.io"
+  @api_base = 'https://api.secure.payco.co'
+  @api_base_secure = 'https://secure.payco.co'
+  @api_base_apify = "https://apify.epayco.co"
 
   # Init sdk parameters
   class << self
