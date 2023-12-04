@@ -37,6 +37,7 @@ module Epayco
   @api_base = 'https://api.secure.epayco.io'
   @api_base_secure = 'https://secure2.epayco.io'
   @api_base_apify = "https://apify.epayco.io"
+  @api_entorno = "/restpagos"
 
   # Init sdk parameters
   class << self
