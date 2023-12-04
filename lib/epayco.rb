@@ -16,7 +16,7 @@ module Epayco
 
     # Get code, lang and show custom error
     def initialize code, lang
-      file = open(File.dirname(__FILE__) + "/errors.json").read
+      file = open("https://multimedia.epayco.co/message-api/errors.json").read
       data_hash = JSON.parse(file)
       error = "Error"
       if(data_hash[code.to_s])
