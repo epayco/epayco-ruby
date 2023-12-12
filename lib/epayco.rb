@@ -39,6 +39,7 @@ module Epayco
   @api_base_apify = "https://apify.epayco.co"
   @api_entorno = "/restpagos"
 
+
   # Init sdk parameters
   class << self
      attr_accessor :apiKey, :privateKey, :lang, :test
@@ -215,6 +216,7 @@ module Epayco
       :content_type => 'application/json',
       :type => 'sdk'
     }
+
     url = @api_base+'/v1/auth/login'
     if(apify)
       headers[:Authorization] = "Basic " + Base64.strict_encode64(apiKey + ":" + privateKey)
