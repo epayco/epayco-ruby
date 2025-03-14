@@ -33,9 +33,11 @@ module Epayco
   end
 
   # Endpoints
-  @api_base = 'https://api.secure.payco.co'
-  @api_base_secure = 'https://secure.payco.co'
-  @api_base_apify = "https://apify.epayco.co"
+  @api_base = 'https://api.secure.epayco.io'
+  @api_base_secure = 'https://secure2.epayco.io'
+  @api_base_apify = "https://apify.epayco.io"
+  @api_entorno = "/restpagos"
+
 
   # Init sdk parameters
   class << self
@@ -58,19 +60,21 @@ module Epayco
     
     # Switch secure or api or apify
     if apify 
-      @tags = JSON.parse(payload)
-      seted = {}
-      file = File.read(File.dirname(__FILE__) + '/keylang_apify.json')
-      data_hash = JSON.parse(file)
-      @tags.each {
-        |key, value|
-        if data_hash[key]
-          seted[data_hash[key]] = value
-        else
-          seted[key] = value
-        end
-      }
-      payload = seted.to_json
+      if  method == :post
+        @tags = JSON.parse(payload)
+        seted = {}
+        file = File.read(File.dirname(__FILE__) + '/keylang_apify.json')
+        data_hash = JSON.parse(file)
+        @tags.each {
+          |key, value|
+          if data_hash[key]
+            seted[data_hash[key]] = value
+          else
+            seted[key] = value
+          end
+        }
+        payload = seted.to_json
+      end
       url = @api_base_apify + url
     elsif  switch
       if method == :post || method == :patch
@@ -82,7 +86,7 @@ module Epayco
         payload = enc.to_json
         end
       end
-      url = @api_base_secure + url
+      url = @api_base_secure + @api_entorno + url
     else
       if method == :post || method == :patch
         rb_hash = JSON.parse(payload)
@@ -113,7 +117,7 @@ module Epayco
     :url => url,
     :payload => payload
     }
-
+    
     # Open library rest client
     begin
       response = execute_request(options)

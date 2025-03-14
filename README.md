@@ -41,6 +41,7 @@ credit_info = {
 
 begin
   token = Epayco::Token.create credit_info
+  puts token
 rescue Epayco::Error => e
   puts e
 end
@@ -62,6 +63,7 @@ customer_info = {
 
 begin
   customer = Epayco::Customers.create customer_info
+  puts customer
 rescue Epayco::Error => e
   puts e
 end
@@ -72,6 +74,7 @@ end
 ```ruby
 begin
   customer = Epayco::Customers.get "id_customer"
+  puts customer
 rescue Epayco::Error => e
   puts e
 end
@@ -79,7 +82,8 @@ end
 
 ```ruby
 begin
-  customer = Epayco::Customers.getCustomer "email","joe@payco.co" 
+  customer = Epayco::Customers.getCustomer "email","joe@payco.co"
+  puts customer
 rescue Epayco::Error => e
   puts e
 end
@@ -88,8 +92,13 @@ end
 #### List
 
 ```ruby
+get_customers_info = {
+  page: "6",
+  perPage: "10"
+}
 begin
-  customer = Epayco::Customers.list
+  customer = Epayco::Customers.list get_customers_info
+  puts customer
 rescue Epayco::Error => e
   puts e
 end
@@ -166,14 +175,27 @@ end
 
 ```ruby
 plan_info = {
-  id_plan: "coursereact",
+  id_plan: "coursereact2",
   name: "Course react js",
   description: "Course react and redux",
   amount: 30000,
   currency: "cop",
   interval: "month",
   interval_count: 1,
-  trial_days: 30
+  trial_days: 30,
+  ip: "127.0.0.1",
+  iva: 5700,
+  ico: 0,
+  planLink: "https://github.com/epayco",
+  greetMessage: "discounted react and redux course",
+  linkExpirationDate:"2025-03-11",
+  subscriptionLimit: 10, #Subscription limit between 0 and 10000
+  imgUrl: "https://epayco.com/wp-content/uploads/2023/04/logo-blanco.svg",
+  discountValue: 5000, #discount value
+  discountPercentage:19, #discount percentage
+  transactionalLimit: 2, #transactional Limit
+  additionalChargePercentage:0, #Additional charge percentage limit
+  firstPaymentAdditionalCost:45700  #Installation Cost
 }
 
 begin
@@ -208,6 +230,33 @@ end
 ```ruby
 begin
   plan = Epayco::Plan.delete "coursereact"
+rescue Epayco::Error => e
+  puts e
+end
+```
+
+#### Update
+
+```ruby
+plan_info = {
+  #id_plan: "coursereact2",
+  name: "Course react js",
+  description: "Course react and redux",
+  amount: 35700,
+  currency: "cop",
+  interval: "month",
+  interval_count: 1,
+  trial_days: 0,
+  ip: "127.0.0.1",
+  iva: 5700,
+  ico: 0,
+  #transactionalLimit: 2, #transactional Limit
+  #additionalChargePercentage:0, #Additional charge percentage limit
+  afterPayment:"message after paying"
+}
+begin
+  plan = Epayco::Plan.update "coursereact2", plan_info
+  print(plan)
 rescue Epayco::Error => e
   puts e
 end

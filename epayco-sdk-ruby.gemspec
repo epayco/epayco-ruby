@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.add_dependency('rest-client', '~> 2.1')
   s.add_dependency('json', '~> 2.1')
   s.add_development_dependency('cutest', '~> 1.2')
-  s.add_development_dependency('mocha', '~> 1.1')
+  s.add_development_dependency('mocha', '~> 2.7')
 
   s.files = %w{
     bin/epayco
