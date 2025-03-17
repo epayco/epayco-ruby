@@ -28,7 +28,7 @@ module Epayco
   end
 
   class Plan < Resource
-    public_class_method :create, :get, :list, :delete
+    public_class_method :create, :get, :list, :delete, :update
   end
 
   class Subscriptions < Resource

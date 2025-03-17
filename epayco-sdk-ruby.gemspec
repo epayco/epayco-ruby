@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 Gem::Specification.new do |s|
-  s.name              = "epayco-sdk-ruby"
+  s.name              = "epayco-sdk-ruby
   s.version           = "1.4.0"
   s.summary           = "Ruby wrapper for Epayco API"
   s.description       = "API to interact with Epayco\nhttps://epayco.co"
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.add_dependency('rest-client', '~> 2.1')
   s.add_dependency('json', '~> 2.1')
   s.add_development_dependency('cutest', '~> 1.2')
-  s.add_development_dependency('mocha', '~> 1.1')
+  s.add_development_dependency('mocha', '~> 2.7')
 
   s.files = %w{
     bin/epayco
