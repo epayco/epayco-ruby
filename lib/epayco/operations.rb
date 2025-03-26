@@ -79,6 +79,8 @@ module Epayco
         dt=false
         if self.url == "customers"
           url = "/payment/v1/customer/edit/" + Epayco.apiKey + "/" + uid
+        elsif self.url == "plan"
+          url = "/recurring/v1/plan/edit/" + uid
         end
         Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false
       end
@@ -126,7 +128,7 @@ module Epayco
         cashdata=false
         dt=false
         if self.url == "customers"
-          url = "/payment/v1/customers/" + Epayco.apiKey
+          url = "/payment/v1/customers/?page=" + params[:page] + "&perPage=" + params[:perPage]
         elsif self.url == "plan"
           url = "/recurring/v1/plans/" + Epayco.apiKey
         elsif self.url == "subscriptions"

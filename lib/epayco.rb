@@ -39,6 +39,8 @@ module Epayco
   @api_base_apify = "https://apify.epayco.io"
   @api_entorno = "/restpagos"
 
+
+
   # Init sdk parameters
   class << self
      attr_accessor :apiKey, :privateKey, :lang, :test
@@ -117,7 +119,7 @@ module Epayco
     :url => url,
     :payload => payload
     }
-
+    
     # Open library rest client
     begin
       response = execute_request(options)
@@ -215,6 +217,7 @@ module Epayco
       :content_type => 'application/json',
       :type => 'sdk'
     }
+
     url = @api_base+'/v1/auth/login'
     if(apify)
       headers[:Authorization] = "Basic " + Base64.strict_encode64(apiKey + ":" + privateKey)
