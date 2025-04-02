@@ -15,9 +15,21 @@ module Epayco
     attr_accessor :errors
 
     # Get code, lang and show custom error
-    def initialize code, lang
-      file = open("https://multimedia.epayco.co/message-api/errors.json").read
-      data_hash = JSON.parse(file)
+    def initialize(code, lang)
+      begin
+        file = open("https://multimedia.epayco.co/message-api/errors.json").read
+        data_hash = JSON.parse(file)
+      rescue OpenURI::HTTPError, Errno::ENOENT => e
+        # Si no se puede acceder al archivo remoto, usar un archivo local como respaldo
+        local_file_path = File.join(File.dirname(__FILE__), 'errors.json')
+        if File.exist?(local_file_path)
+          file = File.read(local_file_path)
+          data_hash = JSON.parse(file)
+        else
+          raise "No se pudo cargar el archivo de errores: #{e.message}"
+        end
+      end
+    
       error = "Error"
       if(data_hash[code.to_s])
         error = [data_hash[code.to_s][lang]]
@@ -59,7 +71,7 @@ module Epayco
     params["extras_epayco"] = {extra5:"P45"}
     payload = JSON.generate(params) if method == :post || method == :patch
     params = nil unless method == :get
-    
+
     # Switch secure or api or apify
     if apify 
       if  method == :post
@@ -126,7 +138,8 @@ module Epayco
       return {} if response.code == 204 and method == :delete
       JSON.parse(response.body, :symbolize_names => true)
     rescue RestClient::Exception => e
-      handle_errors e
+      #handle_errors e
+      return e.response
     end
   end
 
@@ -238,7 +251,8 @@ module Epayco
       return body if body[:bearer_token] || body[:token]
       raise Error.new("104", lang)
     rescue RestClient::Exception => e
-      handle_errors e
+      return e.response
+      #handle_errors e
     end
 
   end
