@@ -128,7 +128,9 @@ module Epayco
         cashdata=false
         dt=false
         if self.url == "customers"
-          url = "/payment/v1/customers/?page=" + params[:page] + "&perPage=" + params[:perPage]
+          page = params[:page] || nil
+          per_page = params[:perPage] || nil
+          url = (page && per_page) ? "/payment/v1/customers/?page=#{page}&perPage=#{per_page}" : "/payment/v1/customers/" + Epayco.apiKey + "/"
         elsif self.url == "plan"
           url = "/recurring/v1/plans/" + Epayco.apiKey
         elsif self.url == "subscriptions"
