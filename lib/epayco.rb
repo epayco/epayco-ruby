@@ -46,9 +46,9 @@ module Epayco
   end
 
   # Endpoints
-  @api_base = 'https://api-green.secure.payco.co'
-  @api_base_secure = 'https://secure-green.payco.co'
-  @api_base_apify = "https://apify-green.epayco.co"
+  @api_base = 'https://api.secure.payco.co'
+  @api_base_secure = 'https://secure.payco.co'
+  @api_base_apify = 'https://apify.epayco.co'
   @api_entorno = "/restpagos"
 
 
