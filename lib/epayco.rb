@@ -4,6 +4,7 @@ require 'openssl'
 require 'base64'
 require 'open-uri'
 require 'socket'
+require 'dotenv/load'
 require_relative 'epayco/resources'
 
 module Epayco
@@ -14,9 +15,21 @@ module Epayco
     attr_accessor :errors
 
     # Get code, lang and show custom error
-    def initialize code, lang
-      file = open("https://multimedia.epayco.co/message-api/errors.json").read
-      data_hash = JSON.parse(file)
+    def initialize(code, lang)
+      begin
+        file = open("https://multimedia.epayco.co/message-api/errors.json").read
+        data_hash = JSON.parse(file)
+      rescue OpenURI::HTTPError, Errno::ENOENT => e
+        # Si no se puede acceder al archivo remoto, usar un archivo local como respaldo
+        local_file_path = File.join(File.dirname(__FILE__), 'errors.json')
+        if File.exist?(local_file_path)
+          file = File.read(local_file_path)
+          data_hash = JSON.parse(file)
+        else
+          raise "No se pudo cargar el archivo de errores: #{e.message}"
+        end
+      end
+    
       error = "Error"
       if(data_hash[code.to_s])
         error = [data_hash[code.to_s][lang]]
@@ -35,7 +48,10 @@ module Epayco
   # Endpoints
   @api_base = 'https://api.secure.payco.co'
   @api_base_secure = 'https://secure.payco.co'
-  @api_base_apify = "https://apify.epayco.co"
+  @api_base_apify = 'https://apify.epayco.co'
+  @api_entorno = "/restpagos"
+
+
 
   # Init sdk parameters
   class << self
@@ -55,22 +71,24 @@ module Epayco
     params["extras_epayco"] = {extra5:"P45"}
     payload = JSON.generate(params) if method == :post || method == :patch
     params = nil unless method == :get
-    
+
     # Switch secure or api or apify
     if apify 
-      @tags = JSON.parse(payload)
-      seted = {}
-      file = File.read(File.dirname(__FILE__) + '/keylang_apify.json')
-      data_hash = JSON.parse(file)
-      @tags.each {
-        |key, value|
-        if data_hash[key]
-          seted[data_hash[key]] = value
-        else
-          seted[key] = value
-        end
-      }
-      payload = seted.to_json
+      if  method == :post
+        @tags = JSON.parse(payload)
+        seted = {}
+        file = File.read(File.dirname(__FILE__) + '/keylang_apify.json')
+        data_hash = JSON.parse(file)
+        @tags.each {
+          |key, value|
+          if data_hash[key]
+            seted[data_hash[key]] = value
+          else
+            seted[key] = value
+          end
+        }
+        payload = seted.to_json
+      end
       url = @api_base_apify + url
     elsif  switch
       if method == :post || method == :patch
@@ -82,7 +100,7 @@ module Epayco
         payload = enc.to_json
         end
       end
-      url = @api_base_secure + url
+      url = @api_base_secure + @api_entorno + url
     else
       if method == :post || method == :patch
         rb_hash = JSON.parse(payload)
@@ -113,14 +131,15 @@ module Epayco
     :url => url,
     :payload => payload
     }
-
+    
     # Open library rest client
     begin
       response = execute_request(options)
       return {} if response.code == 204 and method == :delete
       JSON.parse(response.body, :symbolize_names => true)
     rescue RestClient::Exception => e
-      handle_errors e
+      #handle_errors e
+      return e.response
     end
   end
 
@@ -232,7 +251,8 @@ module Epayco
       return body if body[:bearer_token] || body[:token]
       raise Error.new("104", lang)
     rescue RestClient::Exception => e
-      handle_errors e
+      return e.response
+      #handle_errors e
     end
 
   end
