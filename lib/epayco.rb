@@ -46,9 +46,9 @@ module Epayco
   end
 
   # Endpoints
-  @api_base = 'https://api.secure.epayco.io'
-  @api_base_secure = 'https://secure2.epayco.io'
-  @api_base_apify = "https://apify.epayco.io"
+  @api_base = 'https://eks-subscription-api-lumen-service.epayco.io'
+  @api_base_secure = 'https://eks-rest-pagos-service.epayco.io'
+  @api_base_apify = "https://eks-apify-service.epayco.io"
   @api_entorno = "/restpagos"
 
 
