@@ -16,19 +16,21 @@ module Epayco
 
     # Get code, lang and show custom error
     def initialize(code, lang)
-      begin
-        file = open("https://multimedia.epayco.co/message-api/errors.json").read
-        data_hash = JSON.parse(file)
-      rescue OpenURI::HTTPError, Errno::ENOENT => e
-        # Si no se puede acceder al archivo remoto, usar un archivo local como respaldo
-        local_file_path = File.join(File.dirname(__FILE__), 'errors.json')
-        if File.exist?(local_file_path)
-          file = File.read(local_file_path)
-          data_hash = JSON.parse(file)
-        else
-          raise "No se pudo cargar el archivo de errores: #{e.message}"
-        end
-      end
+      # Usar solo errores por defecto
+      data_hash = {
+        "100" => {"ES" => "[100] Error inicializando el sdk, compruebe que los parametros son correctos", "EN" => "[100] SDK initialization error, please check the parameters are correct"},
+        "101" => {"ES" => "[101] Error de comunicación con el servicio", "EN" => "[101] Communication error with the service"},
+        "102" => {"ES" => "[102] Error desconocido, verifique con soporte", "EN" => "[102] Unknown error, please verify with support"},
+        "103" => {"ES" => "[103] La información suministrada es erronea, verifique con la documentación", "EN" => "[103] The information provided is incorrect, please check the documentation"},
+        "104" => {"ES" => "[104] El servicio no se puede autenticar, verifique su llave pública o llave privada", "EN" => "[104] The service cannot authenticate, please verify your public key or private key"},
+        "105" => {"ES" => "[105] No de puede obtener comunicación con el servicio", "EN" => "[105] Cannot establish communication with the service"},
+        "106" => {"ES" => "[106] Llave pública o Llave privada inválida, compruebela", "EN" => "[106] Public key or Private key invalid, please check"},
+        "107" => {"ES" => "[107] Método no válido, compruebe la petición", "EN" => "[107] Invalid method, please check the request"},
+        "108" => {"ES" => "[108] Error al encriptar los datos, re intente la operación", "EN" => "[108] Error encrypting data, please retry the operation"},
+        "109" => {"ES" => "[109] Método de pago en efectivo no válido, unicamnete soportados: efecty, baloto, gana, redservi, puntored, sured, apostar, susuerte", "EN" => "[109] Invalid cash payment method, only supported: efecty, baloto, gana, redservi, puntored, sured, apostar, susuerte"},
+        
+        "default" => {"ES" => "Error desconocido", "EN" => "Unknown error"}
+      }
     
       error = "Error"
       if(data_hash[code.to_s])
@@ -45,13 +47,10 @@ module Epayco
     end
   end
 
-  # Endpoints
-  @api_base = 'https://api.secure.payco.co'
-  @api_base_secure = 'https://secure.payco.co'
-  @api_base_apify = 'https://apify.epayco.co'
-  @api_entorno = "/restpagos"
-
-
+  @api_base = (ENV['BASE_URL_SDK'] && !ENV['BASE_URL_SDK'].empty?) ? ENV['BASE_URL_SDK'] : 'https://eks-subscription-api-lumen-service.epayco.io'
+  @api_base_secure = (ENV['BASE_URL_SECURE_SDK'] && !ENV['BASE_URL_SECURE_SDK'].empty?) ? ENV['BASE_URL_SECURE_SDK'] : 'https://eks-rest-pagos-service.epayco.io'
+  @api_base_apify = (ENV['BASE_APIFY_SDK'] && !ENV['BASE_APIFY_SDK'].empty?) ? ENV['BASE_APIFY_SDK'] : 'https://eks-apify-service.epayco.io'
+  @api_entorno = (ENV['BASE_URL_ENTORNO_SDK'] && !ENV['BASE_URL_ENTORNO_SDK'].empty?) ?  ENV['BASE_URL_ENTORNO_SDK'] : '/restpagos'
 
   # Init sdk parameters
   class << self
@@ -68,26 +67,35 @@ module Epayco
     if !apiKey || !privateKey || !lang
       raise Error.new('100', lang)
     end
-    params["extras_epayco"] = {extra5:"P45"}
+    
+    if method == :post && params && params.is_a?(Hash) && !params.key?("extras_epayco")
+      params["extras_epayco"] = {extra5:"P45"}
+    end
     payload = JSON.generate(params) if method == :post || method == :patch
     params = nil unless method == :get
 
     # Switch secure or api or apify
     if apify 
       if  method == :post
-        @tags = JSON.parse(payload)
-        seted = {}
-        file = File.read(File.dirname(__FILE__) + '/keylang_apify.json')
-        data_hash = JSON.parse(file)
-        @tags.each {
-          |key, value|
-          if data_hash[key]
-            seted[data_hash[key]] = value
-          else
-            seted[key] = value
-          end
-        }
-        payload = seted.to_json
+        begin
+          @tags = JSON.parse(payload)
+          seted = {}
+          file = File.read(File.dirname(__FILE__) + '/keylang_apify.json')
+          data_hash = JSON.parse(file)
+          @tags.each {
+            |key, value|
+            if data_hash[key]
+              seted[data_hash[key]] = value
+            else
+              seted[key] = value
+            end
+          }
+          payload = seted.to_json
+        rescue JSON::ParserError => e
+          raise Error.new('103', lang)  # Error en formato de datos
+        rescue Errno::ENOENT => e
+          raise Error.new('101', lang)  # Error de comunicación
+        end
       end
       url = @api_base_apify + url
     elsif  switch
@@ -169,8 +177,12 @@ module Epayco
   def self.encrypt_aes(data, cashdata)
    
     sandbox = Epayco.test ? "TRUE" : "FALSE"
-    @tags = JSON.parse(data)
-    @seted = {}
+    begin
+      @tags = JSON.parse(data)
+      @seted = {}
+    rescue JSON::ParserError => e
+      raise Error.new('103', Epayco.lang)  # Error en formato de datos
+    end
     if cashdata
       @tags.each {
         |key, value|
@@ -202,21 +214,33 @@ module Epayco
   end
 
   def self.encrypt(str, key)
-    cipher = OpenSSL::Cipher.new('AES-128-CBC')
-    cipher.encrypt
-    iv = "0000000000000000"
-    cipher.iv = iv
-    cipher.key = key.byteslice(0, cipher.key_len)
-    str = iv + str
-    data = cipher.update(str) + cipher.final
-    Base64.urlsafe_encode64(data)
+    begin
+      cipher = OpenSSL::Cipher.new('AES-128-CBC')
+      cipher.encrypt
+      iv = "0000000000000000"
+      cipher.iv = iv
+      cipher.key = key.byteslice(0, cipher.key_len)
+      str = iv + str
+      data = cipher.update(str) + cipher.final
+      Base64.urlsafe_encode64(data)
+    rescue OpenSSL::CipherError => e
+      raise Error.new('108', Epayco.lang)  # Error al encriptar los datos
+    rescue ArgumentError => e
+      raise Error.new('103', Epayco.lang)  # Error en parámetros de encriptación
+    end
   end
 
   # Traslate secure petitions
   def self.lang_key key
-    file = File.read(File.dirname(__FILE__) + '/keylang.json')
-    data_hash = JSON.parse(file)
-    data_hash[key]
+    begin
+      file = File.read(File.dirname(__FILE__) + '/keylang.json')
+      data_hash = JSON.parse(file)
+      data_hash[key]
+    rescue Errno::ENOENT => e
+      raise Error.new('101', Epayco.lang)  # Error de comunicación
+    rescue JSON::ParserError => e
+      raise Error.new('103', Epayco.lang)  # Error en formato de datos
+    end
   end
 
   def self.authent(apiKey, privateKey, apify, lang)

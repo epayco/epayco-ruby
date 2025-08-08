@@ -1,4 +1,4 @@
-Epayco
+Epayco Ruby
 =====
 
 Ruby wrapper for Epayco API
@@ -20,7 +20,10 @@ $ gem install epayco-sdk-ruby
 ## Usage
 
 ```ruby
+
 require 'epayco-sdk-ruby'
+require_relative 'lib/epayco'
+require 'json'
 
 Epayco.apiKey = 'YOU_PUBLIC_API_KEY'
 Epayco.privateKey = 'YOU_PRIVATE_API_KEY'
@@ -115,6 +118,7 @@ update_customer_info = {
 
 begin
   customer = Epayco::Customers.update "id_customer", update_customer_info
+  puts customer
 rescue Epayco::Error => e
   puts e
 end
@@ -132,6 +136,7 @@ delete_customer_info = {
 
 begin
   customer = Epayco::Customers.delatetetoken delete_customer_info
+  puts customer
 rescue Epayco::Error => e
   puts e
 end
@@ -202,6 +207,7 @@ plan_info = {
 
 begin
   plan = Epayco::Plan.create plan_info
+  puts plan
 rescue Epayco::Error => e
   puts e
 end
@@ -212,6 +218,7 @@ end
 ```ruby
 begin
   plan = Epayco::Plan.get "coursereact"
+  puts plan 
 rescue Epayco::Error => e
   puts e
 end
@@ -222,6 +229,7 @@ end
 ```ruby
 begin
   plan = Epayco::Plan.list
+  puts plan
 rescue Epayco::Error => e
   puts e
 end
@@ -232,6 +240,7 @@ end
 ```ruby
 begin
   plan = Epayco::Plan.delete "coursereact"
+  puts plan
 rescue Epayco::Error => e
   puts e
 end
@@ -258,7 +267,7 @@ plan_info = {
 }
 begin
   plan = Epayco::Plan.update "coursereact2", plan_info
-  print(plan)
+  puts plan
 rescue Epayco::Error => e
   puts e
 end
@@ -282,7 +291,7 @@ subscription_info = {
 
 begin
   sub = Epayco::Subscriptions.create subscription_info
-  assert(sub)
+  puts sub
 rescue Epayco::Error => e
   puts e
 end
@@ -293,6 +302,7 @@ end
 ```ruby
 begin
   sub = Epayco::Subscriptions.get "id_subscription"
+  puts sub
 rescue Epayco::Error => e
   puts e
 end
@@ -303,6 +313,7 @@ end
 ```ruby
 begin
   sub = Epayco::Subscriptions.list
+  puts sub
 rescue Epayco::Error => e
   puts e
 end
@@ -313,6 +324,7 @@ end
 ```ruby
 begin
   sub = Epayco::Subscriptions.cancel "id_subscription"
+  puts sub 
 rescue Epayco::Error => e
   puts e
 end
@@ -334,6 +346,7 @@ subscription_info = {
 
 begin
   sub = Epayco::Subscriptions.charge subscription_info
+  puts sub
 rescue Epayco::Error => e
   puts e
 end
@@ -387,6 +400,7 @@ pse_info = {
 
 begin
   pse = Epayco::Bank.create pse_info
+  puts pse
 rescue Epayco::Error => e
   puts e
 end
@@ -397,6 +411,7 @@ end
 ```ruby
 begin
   pse = Epayco::Bank.get "ticketId"
+  puts pse
 rescue Epayco::Error => e
   puts e
 end
@@ -426,6 +441,7 @@ payment_info = {
 }
 begin
   split_pse = Epayco::Bank.create pse_info
+  puts split_pse
 rescue Epayco::Error => e
   puts e
 end
@@ -470,6 +486,7 @@ cash_info = {
 
 begin
   cash = Epayco::Cash.create cash_info, "efecty"
+  puts cash
 rescue Epayco::Error => e
   puts e
 end
@@ -491,6 +508,7 @@ end
 ```ruby
 begin
   cash = Epayco::Cash.get "transactionID"
+  puts cash
 rescue Epayco::Error => e
   puts e
 end
@@ -520,6 +538,7 @@ payment_info = {
 }
 begin
   split_cash = Epayco::Cash.create cash_info, "efecty"
+  puts split_cash
 rescue Epayco::Error => e
   puts e
 end
@@ -564,6 +583,7 @@ payment_info = {
 
 begin
   pay = Epayco::Charge.create payment_info
+  puts pay
 rescue Epayco::Error => e
   puts e
 end
@@ -574,6 +594,7 @@ end
 ```ruby
 begin
   pay = Epayco::Charge.get "transactionID"
+  puts pay
 rescue Epayco::Error => e
   puts e
 end
@@ -596,6 +617,7 @@ payment_info = {
 }
 begin
   split_payment_info = Epayco::Charge.create payment_info
+  puts split_payment_info
 rescue Epayco::Error => e
   puts e
 end
@@ -620,6 +642,7 @@ payment_info = {
 }
 begin
   split_payment_info = Epayco::Charge.create payment_info
+  puts split_payment_info
 rescue Epayco::Error => e
   puts e
 end
@@ -664,6 +687,7 @@ payment_info = {
 
 begin
   daviplata = Epayco::Daviplata.create payment_info
+  puts daviplata
 rescue Epayco::Error => e
   puts e
 end
@@ -679,6 +703,7 @@ confirm = {
 }
 begin
   daviplata = Epayco::Daviplata.confirm confirm
+  puts daviplata
 rescue Epayco::Error => e
   puts e
 end  
@@ -726,6 +751,7 @@ payment_info = {
 }
 begin
   safetypay = Epayco::Safetypay.create payment_info
+  puts safetypay
 rescue Epayco::Error => e
   puts e
 end  
