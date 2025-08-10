@@ -22,8 +22,6 @@ $ gem install epayco-sdk-ruby
 ```ruby
 
 require 'epayco-sdk-ruby'
-require_relative 'lib/epayco'
-require 'json'
 
 Epayco.apiKey = 'YOU_PUBLIC_API_KEY'
 Epayco.privateKey = 'YOU_PRIVATE_API_KEY'
