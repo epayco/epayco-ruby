@@ -136,7 +136,7 @@ module Epayco
         elsif self.url == "subscriptions"
           url = "/recurring/v1/subscriptions/" + Epayco.apiKey
         elsif self.url == "bank"
-          url = "/pse/bancos.json?public_key=" + Epayco.apiKey
+          url = "/pse/bancos.json?public_key=" + Epayco.apiKey + "&test=" + (Epayco.test ? "TRUE" : "FALSE")
         end
         Epayco.request :get, url, extra, params, self.switch, cashdata, dt, apify = false
       end
