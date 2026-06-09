@@ -3,3 +3,10 @@
 epayco-*.gem
 
 tests/epayco_test.rb
+
+# Las librerías (gems) no versionan Gemfile.lock; se genera en cada build.
+Gemfile.lock
+
+examples
+Gemfile
+Dockerfile
