@@ -1,0 +1,14 @@
+{
+  "_meta": {
+    "resource": "customers",
+    "action": "get",
+    "version": 1,
+    "status": "verified",
+    "source": "GET /api/v1/customer/{uid}"
+  },
+  "status": "success",
+  "success": "success",
+  "type": { "$const": "Find customer" },
+  "data": { "$ref": "fragments/customer/customer", "$from": "data" },
+  "object": {  "$const": "customer" }
+}

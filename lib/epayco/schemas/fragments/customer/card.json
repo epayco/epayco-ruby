@@ -1,0 +1,8 @@
+{
+  "_meta": { "fragment": "card", "version": 1, "status": "verified" },
+  "token": "token",
+  "franchise": "franchise",
+  "mask": "mask",
+  "created": { "$coalesce": ["created", { "$path": "insert", "$format": "date" }] },
+  "default": "default"
+}

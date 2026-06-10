@@ -10,3 +10,5 @@ Gemfile.lock
 examples
 Gemfile
 Dockerfile
+tests
+ARCHITECTURE.md
