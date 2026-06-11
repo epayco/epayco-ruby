@@ -6,6 +6,6 @@
   "email": "email",
   "phone": "phone",
   "address": "address",
-  "cards": { "$each": { "$ref": "fragments/customer/card" }, "$from": "cards" },
+  "cards": { "$each": { "$ref": "fragments/customer/get/card" }, "$from": "cards" },
   "country": "country"
 }

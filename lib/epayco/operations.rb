@@ -58,9 +58,11 @@ module Epayco
         switch = self.switch;
         cashdata=false
         dt=false
+        subs = false;
         if self.url == "customers"
           #url = "/payment/v1/customer/" + Epayco.apiKey + "/" + uid
           url = "/api/v1/customer/" + uid
+          subs = true
         elsif self.url == "plan"
           url = "/recurring/v1/plan/" + Epayco.apiKey + "/" + uid
         elsif self.url == "subscriptions"
@@ -72,7 +74,7 @@ module Epayco
           url = "/transaction/response.json?ref_payco=" + uid + "&public_key=" + Epayco.apiKey
           switch = true
         end
-        raw = Epayco.request :get, url, extra, params, switch, cashdata, dt, apify = false, subs = true
+        raw = Epayco.request :get, url, extra, params, switch, cashdata, dt, apify = false, subs
         deliver(raw, __method__)
       end
 
@@ -135,12 +137,19 @@ module Epayco
 
       # Action retrieve all documents from user
       def list params={}, extra=nil
+        newParmas={}
         cashdata=false
         dt=false
+        subs = false;
         if self.url == "customers"
           page = params[:page] || nil
           per_page = params[:perPage] || nil
           url = (page && per_page) ? "/payment/v1/customers/?page=#{page}&perPage=#{per_page}" : "/payment/v1/customers/" + Epayco.apiKey + "/"
+          #url =  "/api/v1/customer"
+          #newParmas[:currentPage] = page
+          newParmas[:page] = page
+          newParmas[:perPage] = per_page
+          subs = false;
         elsif self.url == "plan"
           url = "/recurring/v1/plans/" + Epayco.apiKey
         elsif self.url == "subscriptions"
@@ -148,7 +157,7 @@ module Epayco
         elsif self.url == "bank"
           url = "/pse/bancos.json?public_key=" + Epayco.apiKey + "&test=" + (Epayco.test ? "TRUE" : "FALSE")
         end
-        raw = Epayco.request :get, url, extra, params, self.switch, cashdata, dt, apify = false, subs = false
+        raw = Epayco.request :get, url, extra, newParmas, self.switch, cashdata, dt, apify = false, subs
         deliver(raw, __method__)
       end
 
