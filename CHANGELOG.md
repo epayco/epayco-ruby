@@ -31,6 +31,12 @@ y el proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - **Esquema `customers.get`** (+ fragmentos `customer` y `card`) verificado
   contra los endpoints `/api/v1/customer/{uid}` y
   `/payment/v1/customer/{key}/{uid}`.
+- **Esquema `customers.list`** (+ fragmento `list/customer`) con paginación en el
+  envelope (`currentPage`, `lastPage`, `total`) y `data` como array de clientes.
+- **`$from` con múltiples rutas** en `$each` y `$ref`: acepta una lista de paths y
+  usa el primero que resuelva (array para `$each`, hash para `$ref`). Permite
+  ubicar el array del listado esté en la raíz (`data`) o anidado (`data.data`).
+
 
 ### Cambiado
 - **(BREAKING)** El formato de salida por defecto pasa de crudo a **mapeado**

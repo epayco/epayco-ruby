@@ -9,6 +9,6 @@
   "status": "success",
   "success": "success",
   "type": { "$const": "Find customer" },
-  "data": { "$ref": "fragments/customer/customer", "$from": "data" },
+  "data": { "$ref": "fragments/customer/get/customer", "$from": "data" },
   "object": {  "$const": "customer" }
 }

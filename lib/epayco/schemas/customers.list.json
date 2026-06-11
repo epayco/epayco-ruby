@@ -1,0 +1,17 @@
+{
+  "_meta": {
+    "resource": "customers",
+    "action": "get",
+    "version": 1,
+    "status": "verified",
+    "source": "GET /api/v1/customer?currentPage={page}&perPage={perPage}"
+  },
+  "status": "success",
+  "success": "success",
+  "type": { "$const": "Find all customer" },
+  "currentPage": "currentPage",
+  "lastPage": "lastPage",
+  "total": { "$coalesce": ["total", "data.total"] },
+  "data": { "$each": { "$ref": "fragments/customer/list/customer" }, "$from": ["data", "data.data"] },
+  "object": {  "$const": "customer" }
+}

@@ -78,18 +78,42 @@ module Epayco
         end
 
         # { "$each": <ref u objeto>, "$from": "data" }
+        # $from puede ser un path (String) o una lista de paths: se usa el primero
+        # que resuelva a un Array. Permite soportar endpoints que ubican el array
+        # en distinta profundidad (p. ej. "data" vs "data.data").
         def map_each(source, spec)
-          arr = spec.key?('$from') ? dig_path(source, spec['$from']) : source
+          arr = resolve_array(source, spec['$from'])
           return [] unless arr.is_a?(Array)
           item_schema = expand(spec['$each'])
           arr.map { |item| item.is_a?(Hash) ? build(item, item_schema) : item }
         end
 
         # { "$ref": "fragments/x", "$from": "data" }
+        # $from acepta un path o una lista de paths: se usa el primer Hash.
         def map_ref(source, spec)
-          sub = spec.key?('$from') ? dig_path(source, spec['$from']) : source
+          sub = resolve_hash(source, spec['$from'])
           return nil unless sub.is_a?(Hash)
           build(sub, SchemaRegistry.fetch_fragment(spec['$ref']))
+        end
+
+        # Devuelve el primer path cuyo valor sea un Array (o source si $from es nil).
+        def resolve_array(source, from)
+          return source if from.nil?
+          Array(from).each do |path|
+            value = dig_path(source, path)
+            return value if value.is_a?(Array)
+          end
+          nil
+        end
+
+        # Devuelve el primer path cuyo valor sea un Hash (o source si $from es nil).
+        def resolve_hash(source, from)
+          return source if from.nil?
+          Array(from).each do |path|
+            value = dig_path(source, path)
+            return value if value.is_a?(Hash)
+          end
+          nil
         end
 
         # Resuelve un { "$ref": "..." } a su esquema; deja pasar un objeto literal.
