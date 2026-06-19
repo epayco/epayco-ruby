@@ -50,7 +50,7 @@ module Epayco
   end
 
   @api_base = (ENV['BASE_URL_SDK'] && !ENV['BASE_URL_SDK'].empty?) ? ENV['BASE_URL_SDK'] : 'https://api.secure.payco.co'
-  @api_base_subscription = (ENV['BASE_URL_SUBSCRIPTION_SDK'] && !ENV['BASE_URL_SUBSCRIPTION_SDK'].empty?) ? ENV['BASE_URL_SUBSCRIPTION_SDK'] : 'https://eks-subscriptions-ms-customer.epayco.io'
+  @api_base_subscription = (ENV['BASE_URL_SUBSCRIPTION_SDK'] && !ENV['BASE_URL_SUBSCRIPTION_SDK'].empty?) ? ENV['BASE_URL_SUBSCRIPTION_SDK'] : 'https://subscriptions-ms-customer.epayco.co'
   @api_base_secure = (ENV['BASE_URL_SECURE_SDK'] && !ENV['BASE_URL_SECURE_SDK'].empty?) ? ENV['BASE_URL_SECURE_SDK'] : 'https://secure.payco.co'
   @api_entorno = (ENV['BASE_URL_ENTORNO_SDK'] && !ENV['BASE_URL_ENTORNO_SDK'].empty?) ?  ENV['BASE_URL_ENTORNO_SDK'] : '/restpagos'
   @api_base_apify = (ENV['BASE_APIFY_SDK'] && !ENV['BASE_APIFY_SDK'].empty?) ? ENV['BASE_APIFY_SDK'] : 'https://apify.epayco.co'
