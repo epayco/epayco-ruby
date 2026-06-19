@@ -14,6 +14,14 @@ module Epayco
       self.url == "bank" || self.url == "cash" ? true : false
     end
 
+    # Punto único de salida de las operaciones.
+    # En modo legacy (default) devuelve la respuesta cruda, idéntico a versiones
+    # anteriores. En modo :mapped aplica el esquema "recurso.accion" (o
+    # passthrough si ese esquema aún no existe).
+    def self.deliver(raw, action)
+      return raw if Epayco.legacy?
+      Epayco::Pipeline.run(raw, "#{url}.#{action}")
+    end
 
   end
 

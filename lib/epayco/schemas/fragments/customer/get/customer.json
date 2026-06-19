@@ -1,0 +1,11 @@
+{
+  "_meta": { "fragment": "customer", "version": 1, "status": "verified" },
+  "id_customer": { "$coalesce": ["_id", "id_customer"] },
+  "name": "name",
+  "created": { "$coalesce": ["created", { "$path": "createdAt", "$format": "date" }] },
+  "email": "email",
+  "phone": "phone",
+  "address": "address",
+  "cards": { "$each": { "$ref": "fragments/customer/get/card" }, "$from": "cards" },
+  "country": "country"
+}

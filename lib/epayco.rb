@@ -6,6 +6,8 @@ require 'open-uri'
 require 'socket'
 require 'dotenv/load'
 require_relative 'epayco/resources'
+require_relative 'epayco/client'
+require_relative 'epayco/pipeline'
 
 module Epayco
 
@@ -48,21 +50,37 @@ module Epayco
   end
 
   @api_base = (ENV['BASE_URL_SDK'] && !ENV['BASE_URL_SDK'].empty?) ? ENV['BASE_URL_SDK'] : 'https://api.secure.payco.co'
+  @api_base_subscription = (ENV['BASE_URL_SUBSCRIPTION_SDK'] && !ENV['BASE_URL_SUBSCRIPTION_SDK'].empty?) ? ENV['BASE_URL_SUBSCRIPTION_SDK'] : 'https://subscriptions-ms-customer.epayco.co'
   @api_base_secure = (ENV['BASE_URL_SECURE_SDK'] && !ENV['BASE_URL_SECURE_SDK'].empty?) ? ENV['BASE_URL_SECURE_SDK'] : 'https://secure.payco.co'
-    @api_entorno = (ENV['BASE_URL_ENTORNO_SDK'] && !ENV['BASE_URL_ENTORNO_SDK'].empty?) ?  ENV['BASE_URL_ENTORNO_SDK'] : '/restpagos'
+  @api_entorno = (ENV['BASE_URL_ENTORNO_SDK'] && !ENV['BASE_URL_ENTORNO_SDK'].empty?) ?  ENV['BASE_URL_ENTORNO_SDK'] : '/restpagos'
   @api_base_apify = (ENV['BASE_APIFY_SDK'] && !ENV['BASE_APIFY_SDK'].empty?) ? ENV['BASE_APIFY_SDK'] : 'https://apify.epayco.co'
 
 
   # Init sdk parameters
+  #
+  # response_format controla el formato de salida de los métodos:
+  #   :mapped (default) -> contrato estable definido por esquemas JSON.
+  #   :legacy           -> respuesta cruda del backend (compatibilidad con
+  #                        versiones anteriores del SDK).
   class << self
-     attr_accessor :apiKey, :privateKey, :lang, :test
+     attr_accessor :apiKey, :privateKey, :lang, :test, :response_format
+  end
+
+  # El formato mapeado es el default; solo :legacy explícito vuelve a la
+  # respuesta cruda. Cualquier otro valor (incluido nil) se trata como mapped.
+  def self.legacy?
+    response_format == :legacy
+  end
+
+  def self.mapped?
+    !legacy?
   end
 
   # Eject request and show response or error
-  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, dt, apify)
+  def self.request(method, url, extra=nil, params={}, headers={}, switch, cashdata, dt, apify, subs)
     method = method.to_sym
 
-    auth = authent(apiKey, privateKey, apify, lang)
+    auth = authent(apiKey, privateKey, apify, lang, subs)
     bearer_token = 'Bearer '+ (auth[:bearer_token] || auth[:token])
 
     if !apiKey || !privateKey || !lang
@@ -121,7 +139,11 @@ module Epayco
           payload = rb_hash.to_json
         end
       end
-      url = @api_base + url
+      if subs
+        url = @api_base_subscription + url
+      else
+        url = @api_base + url
+      end
     end
 
    
@@ -244,7 +266,7 @@ module Epayco
     end
   end
 
-  def self.authent(apiKey, privateKey, apify, lang)
+  def self.authent(apiKey, privateKey, apify, lang, subs)
     @parmas = {}
     @parmas["public_key"] = apiKey
     @parmas["private_key"] = privateKey
@@ -257,7 +279,7 @@ module Epayco
     }
 
     url = @api_base+'/v1/auth/login'
-    if(apify)
+    if(apify || subs)
       headers[:Authorization] = "Basic " + Base64.strict_encode64(apiKey + ":" + privateKey)
       url = @api_base_apify+'/login'
     end

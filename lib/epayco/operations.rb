@@ -27,7 +27,7 @@ module Epayco
           if extra.downcase == 'baloto'
             raise Error.new('109', Epayco.lang)
           end
-          methods_payment = Epayco.request :get, "/payment/cash/entities", extra, {}, false, false, dt, true
+          methods_payment = Epayco.request :get, "/payment/cash/entities", extra, {}, false, false, dt, true, false
           
           if(methods_payment[:success].nil? || !methods_payment[:success])
             raise Error.new('104', Epayco.lang)
@@ -49,7 +49,8 @@ module Epayco
           url = "/payment/process/daviplata"
           apify = true
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify
+        raw = Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify, false
+        deliver(raw, __method__)
       end
 
       # Action retrieve from id
@@ -57,8 +58,11 @@ module Epayco
         switch = self.switch;
         cashdata=false
         dt=false
+        subs = false;
         if self.url == "customers"
-          url = "/payment/v1/customer/" + Epayco.apiKey + "/" + uid
+          #url = "/payment/v1/customer/" + Epayco.apiKey + "/" + uid
+          url = "/api/v1/customer/" + uid
+          subs = true
         elsif self.url == "plan"
           url = "/recurring/v1/plan/" + Epayco.apiKey + "/" + uid
         elsif self.url == "subscriptions"
@@ -70,7 +74,8 @@ module Epayco
           url = "/transaction/response.json?ref_payco=" + uid + "&public_key=" + Epayco.apiKey
           switch = true
         end
-        Epayco.request :get, url, extra, params, switch, cashdata, dt, apify = false
+        raw = Epayco.request :get, url, extra, params, switch, cashdata, dt, apify = false, subs
+        deliver(raw, __method__)
       end
 
       # Action update
@@ -82,7 +87,8 @@ module Epayco
         elsif self.url == "plan"
           url = "/recurring/v1/plan/edit/" + uid
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false
+        raw = Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false, subs = false
+        deliver(raw, __method__)
       end
 
           # Action update token
@@ -92,7 +98,8 @@ module Epayco
           cashdata = false
           dt = true
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false
+        raw = Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false, subs = false
+        deliver(raw, __method__)
       end
 
       def delatetetoken params={}, extra=nil
@@ -101,7 +108,8 @@ module Epayco
           cashdata = false
           dt = true
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false
+        raw = Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false, subs = false
+        deliver(raw, __method__)
       end
       
       def addtoken params={}, extra=nil
@@ -110,27 +118,38 @@ module Epayco
           cashdata = false
           dt = true
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false
+        raw = Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false, subs = false
+        deliver(raw, __method__)
       end
 
       def getCustomer type, uid, extra=nil
         if self.url == "customers"
           url = "/payment/v1/customer/find?" + type + "=" + uid
-          puts url
+          #url = '/api/v1/customer/'+ uid
           cashdata = false
           dt = true
+          apify = false
+          subs = false
         end
-        Epayco.request :get, url, extra, {}, switch, cashdata, dt, apify = false
+        raw = Epayco.request :get, url, extra, {}, switch, cashdata, dt, apify = false, subs = false
+        deliver(raw, __method__)
       end
 
       # Action retrieve all documents from user
       def list params={}, extra=nil
+        newParmas={}
         cashdata=false
         dt=false
+        subs = false;
         if self.url == "customers"
           page = params[:page] || nil
           per_page = params[:perPage] || nil
           url = (page && per_page) ? "/payment/v1/customers/?page=#{page}&perPage=#{per_page}" : "/payment/v1/customers/" + Epayco.apiKey + "/"
+          #url =  "/api/v1/customer"
+          #newParmas[:currentPage] = page
+          newParmas[:page] = page
+          newParmas[:perPage] = per_page
+          subs = false;
         elsif self.url == "plan"
           url = "/recurring/v1/plans/" + Epayco.apiKey
         elsif self.url == "subscriptions"
@@ -138,7 +157,8 @@ module Epayco
         elsif self.url == "bank"
           url = "/pse/bancos.json?public_key=" + Epayco.apiKey + "&test=" + (Epayco.test ? "TRUE" : "FALSE")
         end
-        Epayco.request :get, url, extra, params, self.switch, cashdata, dt, apify = false
+        raw = Epayco.request :get, url, extra, newParmas, self.switch, cashdata, dt, apify = false, subs
+        deliver(raw, __method__)
       end
 
       # Remove data from api
@@ -148,7 +168,8 @@ module Epayco
         if self.url == "plan"
           url = "/recurring/v1/plan/remove/" + Epayco.apiKey + "/" + uid
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false
+        raw = Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false, subs = false
+        deliver(raw, __method__)
       end
 
       # Cance subscription
@@ -160,7 +181,8 @@ module Epayco
         if self.url == "subscriptions"
           url = "/recurring/v1/subscription/cancel"
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false
+        raw = Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false, subs = false
+        deliver(raw, __method__)
       end
 
       def charge params={}, extra=nil
@@ -169,7 +191,8 @@ module Epayco
         if self.url == "subscriptions"
           url = "/payment/v1/charge/subscription/create"
         end
-        Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false
+        raw = Epayco.request :post, url, extra, params, self.switch, cashdata, dt, apify = false, subs = false
+        deliver(raw, __method__)
       end
 
       def confirm params={}
@@ -179,8 +202,8 @@ module Epayco
         if self.url == "daviplata"
           url = "/payment/confirm/daviplata"
         end
-        Epayco.request :post, url, nil, params, self.switch, cashdata, dt, apify
-
+        raw = Epayco.request :post, url, nil, params, self.switch, cashdata, dt, apify, false
+        deliver(raw, __method__)
       end
 
 

@@ -1,0 +1,8 @@
+{
+  "_meta": { "fragment": "customer", "version": 1, "status": "verified" },
+  "id_customer": { "$coalesce": ["_id", "id_customer"] },
+  "email": "email",
+  "name": "name",
+  "phone": "phone",
+  "created": { "$coalesce": ["created", { "$path": "createdAt", "$format": "date" }] }
+}
